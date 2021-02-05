@@ -4,7 +4,7 @@
 \alias{shuffle_questions}
 \title{Randomly shuffle questions in groups}
 \usage{
-shuffle_questions(questions)
+shuffle_questions(questions, shuffle_by = rn)
 }
 \arguments{
 \item{questions}{data frame containing quiz questions and a rn variable that represents the random sequence number of the questions that were provided by the same participant}

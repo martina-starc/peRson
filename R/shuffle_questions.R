@@ -5,10 +5,10 @@
 #' @param questions data frame containing quiz questions and a rn variable that represents the random sequence number of the questions that were provided by the same participant
 #'
 #' @return data frame with shuffled questions
-shuffle_questions <- function(questions) {
+shuffle_questions <- function(questions, shuffle_by = rn) {
   questions %>%
-    group_by(rn) %>%
-    arrange(rn, sample(1:length(rn))) %>%
+    group_by({{shuffle_by}}) %>%
+    arrange({{shuffle_by}}, sample(1:length({{shuffle_by}}))) %>%
     ungroup() %>%
     mutate(n = row_number()) %>%
     select(n, everything())
