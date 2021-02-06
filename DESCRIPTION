@@ -14,3 +14,9 @@ Suggests:
 Config/testthat/edition: 3
 Depends: 
     dplyr
+Imports: 
+    tidyr,
+    purrr,
+    stringr,
+    grDevices,
+    stats

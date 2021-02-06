@@ -13,3 +13,16 @@ shuffle_questions <- function(questions, shuffle_by = rn) {
     mutate(n = row_number()) %>%
     select(n, everything())
 }
+
+shuffle_answers <- function(questions) {
+  questions %>%
+  tidyr::pivot_longer(cols = -c(person, text), names_to = c(".value", "type"),
+               names_pattern = "(image|answer)_([A-D])"
+  ) %>%
+  group_by(person, text) %>%
+  mutate(type = sample(type, 4)) %>%
+  arrange(person, text, type) %>%
+  tidyr::pivot_wider(id_cols = c(person, text), values_from = c(answer, image), names_from = type) %>%
+  group_by(person) %>%
+  mutate(rn = sample(1:length(person)))
+}
