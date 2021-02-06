@@ -8,7 +8,8 @@ process_colors <- function(data) {
   data %>%
     mutate(color = tidyr::replace_na(color, random_color())) %>%
     rowwise() %>%
-    mutate(rgb = list(purrr::set_names(grDevices::col2rgb(color), c("r", "g", "b")))) %>%
+    mutate(rgb = list(purrr::set_names(grDevices::col2rgb(color), c("r", "g", "b"))),
+           hex = gplots::col2hex(color)) %>%
     ungroup() %>%
     tidyr::unnest_wider(rgb) %>%
     mutate(dist =
@@ -122,3 +123,32 @@ html, body {{
 
 }
 
+show_contestants <- function(presence, n_per_row = 5) {
+
+  person_tables <- quiz$participants %>%
+    filter(name %in% presence) %>%
+    arrange(sample(row_number())) %>%
+    purrr::pmap(function(name, image, hex, ...) {
+      glue::glue('
+<td style = "width: {100 / n_per_row}%"><table style = "width: 200px">
+  <tr><td style = "background-color: {hex}; width: 200px; height: 10px; padding: 0px; margin: 0px"></td></tr>
+  <tr><td style = "vertical-align: top; padding: 0px; margin: 0px; width: 200 px"><img src = "{image}"></img></td></tr>
+  <tr><td style = "text-align: center; font-size: 20px; vertical-align: middle; padding: 0px; margin: 0px; width: 200 px">{name}</td></tr>
+</table></td>
+')
+    })
+
+  html_doc <- purrr::map(1:(length(person_tables) %/% n_per_row + ifelse(length(person_tables) %% n_per_row > 0, 1, 0)), ~person_tables[(. * n_per_row - n_per_row + 1):(. * n_per_row)]) %>%
+    purrr::map(~paste(unlist(.), collapse = "")) %>%
+    purrr::map(~paste0('<tr style = "background-color: white">', ., "</tr>\n")) %>%
+    unlist() %>%
+    paste(collapse = "") %>%
+    paste0('<table style = "margin-left: auto; margin-right: auto;">', ., "</table>")
+
+  html_file <- file(paste0("q0.html"))
+  writeLines(html_doc, html_file)
+  close(html_file)
+
+}
+quiz_setup(demo_questions, demo_participants)
+show_contestants(quiz$participants$name)
