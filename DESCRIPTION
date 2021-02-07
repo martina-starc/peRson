@@ -19,4 +19,8 @@ Imports:
     purrr,
     stringr,
     grDevices,
-    stats
+    stats,
+    forcats,
+    ggplot2,
+    glue,
+    gplots

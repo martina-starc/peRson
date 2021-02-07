@@ -1,6 +1,7 @@
-show_leaderboard <- function(answers = quiz$answers) {
+show_leaderboard <- function(answers = quiz$answers, n = length(quiz$answers)) {
   leaderboard_plot <- answers %>%
     bind_rows() %>%
+    filter(n <= n) %>%
     group_by(name) %>%
     filter(name %in% quiz$presence) %>%
     summarise(total = sum(correct, na.rm = T), `.groups` = "drop") %>%
@@ -21,7 +22,6 @@ show_leaderboard <- function(answers = quiz$answers) {
           axis.ticks = ggplot2::element_blank(),
           plot.title = ggplot2::element_text(size = 15))
   print(leaderboard_plot)
-  ggplot2::ggsave(filename = paste0("l", length(answers), ".png"), plot = leaderboard_plot, height = 5)
+  ggplot2::ggsave(filename = paste0("l", n, ".png"), plot = leaderboard_plot, height = 5)
 
 }
-show_leaderboard()

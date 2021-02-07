@@ -38,6 +38,9 @@ a.next:hover {{
   <tr>
     <td colspan = 4><img src = "a{n}.png", onerror = "this.onerror=null; this.src=\'./inst/pics/transparent.png\'"></img></td>
   </tr>
+  <tr>
+    <td colspan = 4><img src = "l{n}.png", onerror = "this.onerror=null; this.src=\'./inst/pics/transparent.png\'"></img></td>
+  </tr>
 </table>
 <table style = "width: 100%">
   <tr>

@@ -45,8 +45,5 @@ evaluate_answers <- function(answers, n = length(quiz$answers) + 1, correct_valu
           plot.title = ggplot2::element_text(size = 10))
 
   ggplot2::ggsave(filename = paste0("a", n, ".png"), plot = results_plot, height = plot_height)
-  print(results_plot)
-  #if(n %% 4 == 0) show_leaderboard()
+  if(n %% 4 == 0) show_leaderboard(n = n)
 }
-
-evaluate_answers(demo_answers, 1)
