@@ -11,8 +11,7 @@ process_colors <- function(data) {
              stats::dist(upper = TRUE) %>%
              as.matrix() %>%
              colMeans()
-    ) %>%
-    mutate(avg = grDevices::rgb(mean(r), mean(g), mean(b), maxColorValue = 255))
+    )
 }
 
 random_colour <- function(exclude_colors = NA) {

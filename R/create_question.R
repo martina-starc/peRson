@@ -1,9 +1,8 @@
 create_question <- function(n) {
   question <- quiz$questions[n, ] %>% as.list
-  bg_colors <- with(quiz$participants, purrr::set_names(gplots::col2hex(color), name))
-  bg_previous <- ifelse(n == 1, "black", bg_colors[unlist(quiz$questions[n - 1, "person"])])
-  bg_current <- bg_colors[question$person]
-  bg_next <- ifelse(n == nrow(quiz$questions), "black", bg_colors[unlist(quiz$questions[n + 1, "person"])])
+  bg_previous <- ifelse(n == 1, "black", quiz$named_colors[unlist(quiz$questions[n - 1, "person"])])
+  bg_current <- quiz$named_colors[question$person]
+  bg_next <- ifelse(n == nrow(quiz$questions), "black", quiz$named_colors[unlist(quiz$questions[n + 1, "person"])])
 
   html_doc <- with(question, glue::glue('
 <!DOCTYPE html>
