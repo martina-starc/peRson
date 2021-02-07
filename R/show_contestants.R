@@ -1,9 +1,13 @@
 show_contestants <- function(presence, n_per_row = 5) {
 
+  bg_next <- quiz$named_colors[unlist(quiz$questions[1, "person"])]
+  pic_file <- system.file("pics", "caty_pexels-kelvin-valerio-617278.jpg", package = "peRson")
+
   person_tables <- quiz$participants %>%
     filter(name %in% presence) %>%
+    mutate(image_file = system.file("pics", image, package = "peRson")) %>%
     arrange(sample(row_number())) %>%
-    purrr::pmap(function(name, image, hex, ...) {
+    purrr::pmap(function(name, image_file, hex, ...) {
       glue::glue('
 <td id = "contestant-wrapper", style = "width: {100 / n_per_row}%">
 <table id = "contestant">
@@ -11,7 +15,7 @@ show_contestants <- function(presence, n_per_row = 5) {
     <td style = "background-color: {hex}; height: 10px"></td>
   </tr>
   <tr>
-    <td><img src = "{image}"></img></td>
+    <td><img src = "{image_file}"></img></td>
   </tr>
   <tr>
     <td>{name}</td>
@@ -36,11 +40,18 @@ table {{}
   width: {200 * n_per_row + 20 * (n_per_row - 1)}px;
   height: {ceiling(length(person_tables) / n_per_row) * 250}px
 }}
+
+a.next:hover {{
+  background-color: {bg_next};
+}}
 </style>
 </head>
 <body>
 <table>
-{tables}
+  {tables}
+  <tr>
+    <td colspan = {n_per_row}, style = "width: 100%"><a class = "next", href = "q1.html"></a></td>
+  </tr>
 </table>
 </body>
 </html>', tables = .)
@@ -50,3 +61,4 @@ table {{}
   close(html_file)
 
 }
+
