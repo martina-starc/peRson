@@ -37,62 +37,32 @@ quiz_setup <- function(questions, participants, presence = participants$name) {
 
 create_question <- function(n) {
   question <- quiz$questions[n, ] %>% as.list
-  bgcolor <- gplots::col2hex(with(quiz$participants, color[which(name == question$person)]))
+  bg_colors <- with(quiz$participants, purrr::set_names(gplots::col2hex(color), name))
+  bg_previous <- ifelse(n == 1, "black", bg_colors[unlist(quiz$questions[n - 1, "person"])])
+  bg_current <- bg_colors[question$person]
+  bg_next <- ifelse(n == nrow(quiz$questions), "black", bg_colors[unlist(quiz$questions[n + 1, "person"])])
+
   html_doc <- with(question, glue::glue('
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="./inst/styles.css">
 <style>
-html, body {{
-  height: 100%;
-  margin: 0;
-  padding: 20px;
+a.previous:hover {{
+  background-color: {bg_previous};
 }}
 
-#question img {{
-  padding: 0;
-  padding-top: 10px;
-  display: block;
-  margin: 0 auto;
-  max-height: 100%;
-  max-width: 100%;
+a.next:hover {{
+  background-color: {bg_next};
 }}
 
-#question {{
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}}
-
-#question a {{
-  font-size: 50px;
-}}
-
-#question td {{
-  vertical-align: top;
-  text-align: left;
-  width: 25%;
-  padding: 8px;
-  font-size: 20px;
-}}
-
-#question td.q {{
-  font-size: 25px;
-  background-color: #f3f3f3;
-  font-style: normal;
-  padding-bottom: 30px;
-}}
-
-#question tr:nth-child(even){{background-color: white;}}
-
-#question tr:hover {{background-color: transparent;}}
 </style>
 </head>
 <body>
 
 <table id="question">
   <tr>
-    <td colspan = 4, style = "background-color: {bgcolor}"></td>
+    <td colspan = 4, style = "background-color: {bg_current}"></td>
   </tr>
   <tr>
     <td class = "q", colspan = 4>{n}. {text}</td>
@@ -106,13 +76,13 @@ html, body {{
   <tr>
     <td colspan = 4><img src = "a{n}.png", onerror = "this.onerror=null; this.src=\'./inst/pics/transparent.png\'"></img></td>
   </tr>
-  <tr>
-    <td colspan = 2><a href = "q{n-1}.html"><</a></td>
-    <td colspan = 2, style = "text-align: right"><a href = "q{n+1}.html">></a></td>
-  </tr>
-
 </table>
-
+<table style = "width: 100%">
+  <tr>
+    <td style = "width: 50%"><a class = "previous", href = "q{n-1}.html"></a></td>
+    <td style = "width: 50%; text-align: right"><a class = "next", href = "q{n+1}.html"></a></td>
+  </tr>
+</table>
 </body>
 </html>
 '))
@@ -122,6 +92,7 @@ html, body {{
   close(html_file)
 
 }
+purrr::walk(1:21, create_question)
 
 show_contestants <- function(presence, n_per_row = 5) {
 
@@ -130,11 +101,19 @@ show_contestants <- function(presence, n_per_row = 5) {
     arrange(sample(row_number())) %>%
     purrr::pmap(function(name, image, hex, ...) {
       glue::glue('
-<td style = "width: {100 / n_per_row}%"><table style = "width: 200px">
-  <tr><td style = "background-color: {hex}; width: 200px; height: 10px; padding: 0px; margin: 0px"></td></tr>
-  <tr><td style = "vertical-align: top; padding: 0px; margin: 0px; width: 200 px"><img src = "{image}"></img></td></tr>
-  <tr><td style = "text-align: center; font-size: 20px; vertical-align: middle; padding: 0px; margin: 0px; width: 200 px">{name}</td></tr>
-</table></td>
+<td id = "contestant-wrapper", style = "width: {100 / n_per_row}%">
+<table id = "contestant">
+  <tr>
+    <td style = "background-color: {hex}; height: 10px"></td>
+  </tr>
+  <tr>
+    <td><img src = "{image}"></img></td>
+  </tr>
+  <tr>
+    <td>{name}</td>
+  </tr>
+</table>
+</td>
 ')
     })
 
@@ -143,12 +122,31 @@ show_contestants <- function(presence, n_per_row = 5) {
     purrr::map(~paste0('<tr style = "background-color: white">', ., "</tr>\n")) %>%
     unlist() %>%
     paste(collapse = "") %>%
-    paste0('<table style = "margin-left: auto; margin-right: auto;">', ., "</table>")
+    glue::glue('
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="./inst/styles.css">
+<style>
+table {{}
+  width: {200 * n_per_row + 20 * (n_per_row - 1)}px;
+  height: {ceiling(length(person_tables) / n_per_row) * 250}px
+}}
+</style>
+</head>
+<body>
+<table>
+{tables}
+</table>
+</body>
+</html>', tables = .)
 
   html_file <- file(paste0("q0.html"))
   writeLines(html_doc, html_file)
   close(html_file)
 
 }
-quiz_setup(demo_questions, demo_participants)
 show_contestants(quiz$participants$name)
+quiz_setup(demo_questions, demo_participants)
+
+
