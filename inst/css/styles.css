@@ -125,3 +125,9 @@ a:active {
   width: 90%;
   text-align: left;
 }
+
+.header {
+  color: white;
+  font-size: 70px;
+  text-align: center;
+}

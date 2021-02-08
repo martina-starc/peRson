@@ -5,7 +5,7 @@ favourite_question <- function(n) {
 }
 
 favourite_result <- function(answer, n) {
-  answer %>%
+  fresult <- answer %>%
     tidyr::pivot_longer(everything()) %>%
     mutate(n = as.numeric(value)) %>%
     select(n, name) %>%
@@ -14,7 +14,9 @@ favourite_result <- function(answer, n) {
       favourite_question(n), by = "n"
     ) %>%
     arrange(desc(count)) %>%
-    filter(!is.na(count)) %>%
+    filter(!is.na(count))
+  quiz$favourite_results <<- fresult
+  fresult %>%
     select(n = count, person, text)
 }
 
