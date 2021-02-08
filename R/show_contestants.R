@@ -63,4 +63,3 @@ a.next:hover {{
   close(html_file)
 
 }
-

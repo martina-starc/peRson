@@ -1,8 +1,3 @@
-header_div <- function(text, bgcolor) {
-  glue::glue('<div class="header" style="background-color: {bgcolor};">{text}</div>')
-}
-
-
 final_results <- function() {
 
   who_asked <- quiz$questions %>%

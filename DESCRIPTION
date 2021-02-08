@@ -3,7 +3,7 @@ Title: Get To Know Your Colleagues Quiz!
 Version: 0.0.0.9000
 Authors@R:
     person("Martina", "Starc", email = "martina.starc@gmail.com", role = c("aut", "cre"))
-Description: Provides the infrastructure necessary to create a personal, team-building quiz you can play with your colleagues online with video conferencing, Google Sheets and IPython R kernel. 
+Description: Provides the infrastructure necessary to create a personal, team-building quiz you can play with your colleagues online with video conferencing, Google Sheets and a web browser. 
     Contestants provide questions and answers about themselves, without giving away the answer. During the quiz they answer their own questions and thus reveal which answer is correct. It's a fun way to get to know more about the people you work with.
 License: MIT + file LICENSE
 Encoding: UTF-8
