@@ -101,4 +101,22 @@ a:active {
   color: inherit;
 }
 
+.favourite {
+  width: 100%;
+  font-size: 15px;
+  text-align: left;
+}
 
+.fav-color {
+  width: 5%;
+}
+
+.fav-n {
+  width: 5%;
+  text-align: center;
+}
+
+.fav-text {
+  width: 90%;
+  text-align: left;
+}
