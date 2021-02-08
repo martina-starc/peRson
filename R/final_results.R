@@ -72,17 +72,21 @@ final_results <- function() {
 
   person_tables <- sorted_names %>%
     purrr::map(function(name) {
+
       n_badges <- length(badge_winners[[name]])
       purrr::map(badge_winners[[name]], function(badge) {
         default_badge <- system.file("pics", glue::glue("black_{badge}.png"), package = "peRson")
-        glue::glue('<img src="{name}_{badge}.png" alt="{badge_labels[[badge]]}" style="display:inline-block" onerror="this.onerror=null; this.src=\'{default_badge}\'"></img>', name = name, badge = badge)
+        glue::glue('<img src="{name}_{badge}.png" title="{badge_labels[[badge]]}" style="display:inline-block" onerror="this.onerror=null; this.src=\'{default_badge}\'"></img>', name = name, badge = badge)
       }) %>%
       paste(collapse = "") %>%
       glue::glue('
-<table style="width: {n_badges * 66 + 160}px; margin:0px; padding:0px">
-  <tr style="margin: 0px; padding: 0px">
-    <td style = "width: 130px; margin: 0px; padding: 2px"><img src = ""></img></td>
-    <td style = "width: {n_badges * 66 + 30}px; text-align: left"><p style = "font-size: 20px; vertical-align: top; padding-bottom: 10px; margin: 0px">{name}<br></p>{pics}</td>
+<table class="badges" style="width: {n_badges * 66 + 160}px">
+  <tr>
+    <td colspan=2 style="background-color:{quiz$named_colors[[name]]}"></td>
+  </tr>
+  <tr>
+    <td style="width: 130px"><img src="{quiz$participants$image[which(quiz$participants$name == name)]}"></img></td>
+    <td style="width: {n_badges * 66 + 30}px"><p>{name}<br></p>{pics}</td>
   </tr>
 </table>', pics = .)
     })
@@ -93,18 +97,27 @@ final_results <- function() {
 
   html_doc <- purrr::map2(person_tables[1:middle_user], person_tables[(middle_user + 1):(length(person_tables) + length(person_tables) %% 2)],
        ~glue::glue('
-<tr style="background-color: white; margin: 0px; padding: 0px">
-  <td style = "width: {width_col1}px; margin: 0px; padding: 0px">{.x}</td>
-  <td style = "width: {width_col2}px; margin: 0px; padding: 0px">{ifelse(is.null(.y), "", .y)}</td>
+<tr>
+  <td style = "width: {width_col1}px">{.x}</td>
+  <td style = "width: {width_col2}px">{ifelse(is.null(.y), "", .y)}</td>
 </tr>')) %>%
     unlist() %>%
     paste(collapse = "") %>%
     glue::glue('
-<table style = "margin: auto;">
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{quiz$css_file}">
+</head>
+<body>
+{header_div("QUIZ RESULTS", quiz$named_colors[\"avg\"])}
+<table class="final">
 {tables}
-</table>', tables = .)
+</table>
+</body>
+</html>', tables = .)
 
-  html_file <- file(paste0("q", length(quiz$answers) + 2, ".html"))
+  html_file <- file(paste0("q", length(quiz$answers) + 3, ".html"))
   writeLines(html_doc, html_file)
   close(html_file)
 

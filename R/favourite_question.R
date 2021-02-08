@@ -1,27 +1,30 @@
-favourite_question <- function(n) {
+favourite_question <- function(n = length(quiz$answers)) {
   quiz$questions %>%
     head(n) %>%
-    select(n, person, text)
+    select(n, person, text) %>%
+    favourite_table(n = n + 1)
 }
 
-favourite_result <- function(answer, n) {
+favourite_result <- function(answer, n = length(quiz$answers)) {
   fresult <- answer %>%
     tidyr::pivot_longer(everything()) %>%
     mutate(n = as.numeric(value)) %>%
     select(n, name) %>%
     count(n, name = "count") %>%
     left_join(
-      favourite_question(n), by = "n"
+      quiz$questions %>%
+        head(n) %>%
+        select(n, person, text), by = "n"
     ) %>%
     arrange(desc(count)) %>%
     filter(!is.na(count))
   quiz$favourite_results <<- fresult
   fresult %>%
-    select(n = count, person, text)
+    select(n = count, person, text) %>%
+    favourite_table(n = n + 2)
 }
 
 favourite_table <- function(questions, n) {
-  css_file <- system.file("css", "styles.css", package = "peRson")
   html_doc <- questions %>%
     mutate(bgcolor = quiz$named_colors[person]) %>%
     purrr::pmap(function(bgcolor, text, n, ...) {
@@ -37,11 +40,25 @@ favourite_table <- function(questions, n) {
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="{css_file}">
+<link rel="stylesheet" href="{quiz$css_file}">
 </head>
 <body>
+<table id="question">
+  <tr>
+    <td colspan=4 style="background-color: {quiz$named_colors[[\"avg\"]]}"></td>
+  </tr>
+  <tr>
+    <td class="q" colspan=4>Favourite question</td>
+  </tr>
+</table>
 <table class="favourite">
 {rows}
+</table>
+<table id="navigation">
+  <tr>
+    <td class="previous"><a class="previous" href="q{n-1}.html"></a></td>
+    <td class="next"><a class="next" href="q{n+1}.html"></a></td>
+  </tr>
 </table>
 </body>
 </html>', rows = .)

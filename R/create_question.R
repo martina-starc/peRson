@@ -3,12 +3,11 @@ create_question <- function(n) {
   bg_previous <- ifelse(n == 1, quiz$named_colors[["avg"]], quiz$named_colors[unlist(quiz$questions[n - 1, "person"])])
   bg_current <- quiz$named_colors[question$person]
   bg_next <- ifelse(n == nrow(quiz$questions), quiz$named_colors[["avg"]], quiz$named_colors[unlist(quiz$questions[n + 1, "person"])])
-  css_file <- system.file("css", "styles.css", package = "peRson")
   html_doc <- with(question, glue::glue('
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="{css_file}">
+<link rel="stylesheet" href="{quiz$css_file}">
 <style>
 a.previous:hover {{
   background-color: {bg_previous};
