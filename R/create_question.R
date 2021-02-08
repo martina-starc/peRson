@@ -13,12 +13,21 @@ a.previous:hover {{
   background-color: {bg_previous};
 }}
 
+a.current:hover {{
+  background-color: {bg_current};
+}}
+
 a.next:hover {{
   background-color: {bg_next};
 }}
 </style>
 </head>
 <body>
+<table class="navigation">
+  <tr>
+    <td><a class="current" href="q{n}.html"></a></td>
+  </tr>
+</table>
 <table id="question">
   <tr>
     <td colspan=4 style="background-color: {bg_current}"></td>
@@ -33,13 +42,13 @@ a.next:hover {{
     <td>D: {answer_D}<img src="{image_D}"></img></td>
   </tr>
   <tr>
-    <td colspan=4><img src="a{n}.png" onerror="this.onerror=null; this.src=\'./inst/pics/transparent.png\'"></img></td>
+    <td colspan=4><img src="a{n}.png" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
   </tr>
   <tr>
-    <td colspan=4><img src="l{n}.png" onerror="this.onerror=null; this.src=\'./inst/pics/transparent.png\'"></img></td>
+    <td colspan=4><img src="l{n}.png" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
   </tr>
 </table>
-<table id="navigation">
+<table class="navigation">
   <tr>
     <td class="previous"><a class="previous" href="q{n-1}.html"></a></td>
     <td class="next"><a class="next" href="q{n+1}.html"></a></td>

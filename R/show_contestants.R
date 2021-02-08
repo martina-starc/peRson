@@ -46,10 +46,13 @@ a.next:hover {{
 </style>
 </head>
 <body>
+{header_div("Do you know me? QUIZ", quiz$named_colors[\"avg\"])}
 <table class="contestant-wrapper">
-  {rows}
+               {rows}
+</table>
+<table class="navigation">
   <tr>
-    <td colspan={n_per_row} style = "width: 100%"><a class="next" href="q1.html"></a></td>
+    <td><a class="next" href="q1.html"></a></td>
   </tr>
 </table>
 </body>

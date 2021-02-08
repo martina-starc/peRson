@@ -17,3 +17,4 @@ quiz_setup <- function(questions, participants, presence = participants$name) {
 
   quiz <<- quiz
 }
+

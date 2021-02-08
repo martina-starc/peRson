@@ -43,6 +43,11 @@ favourite_table <- function(questions, n) {
 <link rel="stylesheet" href="{quiz$css_file}">
 </head>
 <body>
+<table class="navigation">
+  <tr>
+    <td><a class="current" href="q{n}.html"></a></td>
+  </tr>
+</table>
 <table id="question">
   <tr>
     <td colspan=4 style="background-color: {quiz$named_colors[[\"avg\"]]}"></td>
@@ -54,7 +59,7 @@ favourite_table <- function(questions, n) {
 <table class="favourite">
 {rows}
 </table>
-<table id="navigation">
+<table class="navigation">
   <tr>
     <td class="previous"><a class="previous" href="q{n-1}.html"></a></td>
     <td class="next"><a class="next" href="q{n+1}.html"></a></td>
