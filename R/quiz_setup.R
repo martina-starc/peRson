@@ -7,8 +7,7 @@ quiz_setup <- function(questions, participants, presence = participants$name) {
     filter(person %in% presence) %>%
     shuffle_questions()
   quiz$participants <- participants %>%
-    process_colors() %>%
-    mutate(image = system.file("pics", image, package = "peRson"))
+    process_colors()
   quiz$named_colors <- with(quiz$participants, c(purrr::set_names(hex, name),
                                                  "avg" = grDevices::rgb(mean(r), mean(g), mean(b), maxColorValue = 255)))
   quiz$question_colors <- quiz$named_colors[quiz$questions$person]
@@ -20,8 +19,8 @@ quiz_setup <- function(questions, participants, presence = participants$name) {
 
 process_colors <- function(data) {
   data %>%
-    mutate(color = tidyr::replace_na(color, random_color())) %>%
     rowwise() %>%
+    mutate(color = if_else(is.na(color), random_color(data$color), color)) %>%
     mutate(rgb = list(purrr::set_names(grDevices::col2rgb(color), c("r", "g", "b"))),
            hex = gplots::col2hex(color)) %>%
     ungroup() %>%
