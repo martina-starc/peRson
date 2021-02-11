@@ -1,20 +1,34 @@
-quiz_setup <- function(questions, participants, presence = participants$name) {
+quiz_setup <- function(questions, participants, presence = participants$name, shuffle = TRUE) {
   quiz <- list()
   quiz$css_file <- system.file("css", "styles.css", package = "peRson")
   quiz$all_questions <- questions %>%
-    shuffle_answers()
+    { if(shuffle) shuffle_answers(.) else . }
   quiz$questions <- quiz$all_questions %>%
     filter(person %in% presence) %>%
-    shuffle_questions()
+    { if(shuffle) shuffle_questions(.) else . }
   quiz$participants <- participants %>%
-    process_colors()
+    mutate(chose_color = !is.na(color)) %>%
+    split(.$chose_color) %>%
+    purrr::map(process_colors) %>%
+    bind_rows() %>%
+    mutate(dist = if_else(chose_color, dist, NA_real_))
   quiz$named_colors <- with(quiz$participants, c(purrr::set_names(hex, name),
-                                                 "avg" = grDevices::rgb(mean(r), mean(g), mean(b), maxColorValue = 255)))
+                                                 "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),
+                                                                        mean(g[chose_color], na.rm = TRUE),
+                                                                        mean(b[chose_color], na.rm = TRUE),
+                                                                        maxColorValue = 255)))
   quiz$question_colors <- quiz$named_colors[quiz$questions$person]
   quiz$presence <- presence
   quiz$answers <- list()
 
   quiz <<- quiz
+}
+
+get_color_dist <- function(r, g, b) {
+  data.frame(r, g, b) %>%
+    stats::dist(upper = TRUE) %>%
+    as.matrix() %>%
+    colMeans()
 }
 
 process_colors <- function(data) {
@@ -25,12 +39,7 @@ process_colors <- function(data) {
            hex = gplots::col2hex(color)) %>%
     ungroup() %>%
     tidyr::unnest_wider(rgb) %>%
-    mutate(dist =
-             as.matrix(r, g, b) %>%
-             stats::dist(upper = TRUE) %>%
-             as.matrix() %>%
-             colMeans()
-    )
+    mutate(dist = get_color_dist(r, g, b))
 }
 
 random_color <- function(exclude_colors = NA) {

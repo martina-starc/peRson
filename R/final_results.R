@@ -41,8 +41,8 @@ final_results <- function() {
   badge_winners$easy <- totals_question %>% filter(total == max(total)) %>% distinct(person) %>% pull(person)
   badge_winners$favourite <- quiz$favourite_results %>% filter(count == max(count)) %>% distinct(person) %>% pull(person)
 
-  badge_winners$mean <- quiz$participants %>% filter(dist == min(dist)) %>% distinct(name) %>% pull(name)
-  badge_winners$unique <- quiz$participants %>% filter(dist == max(dist)) %>% distinct(name) %>% pull(name)
+  badge_winners$mean <- quiz$participants %>% filter(dist == min(dist, na.rm = TRUE)) %>% distinct(name) %>% pull(name)
+  badge_winners$unique <- quiz$participants %>% filter(dist == max(dist, na.rm = TRUE)) %>% distinct(name) %>% pull(name)
 
   badge_winners <- badge_winners %>%
     purrr::map(~data.frame(name = .)) %>%

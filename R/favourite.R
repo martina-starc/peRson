@@ -17,7 +17,7 @@ favourite_result <- function(answer, n = length(quiz$answers)) {
         select(n, person, text), by = "n"
     ) %>%
     arrange(desc(count)) %>%
-    filter(!is.na(count))
+    na.omit()
   quiz$favourite_results <<- fresult
   fresult %>%
     select(n = count, person, text) %>%

@@ -15,9 +15,7 @@ evaluate_answers <- function(answers, n = length(quiz$answers) + 1, correct_valu
     group_by(value) %>%
     summarise(n = n()) %>%
     pull(n) %>%
-    max() %>%
-    c(. / 2 + 0.5, 5) %>%
-    min()
+    max() * 0.25 + 0.5
 
   results_plot <- answer %>%
     group_by(value) %>%
