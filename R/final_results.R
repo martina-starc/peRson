@@ -112,7 +112,7 @@ final_results <- function() {
 </body>
 </html>', tables = .)
 
-  html_file <- file(paste0("quiz/q", length(quiz$answers) + 3, ".html"))
+  html_file <- file(paste0("quiz/Q", length(quiz$answers) + 3, ".html"))
   writeLines(html_doc, html_file)
   close(html_file)
 

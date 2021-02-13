@@ -45,7 +45,7 @@ favourite_table <- function(questions, n) {
 <body>
 <table class="navigation">
   <tr>
-    <td><a class="current" href="q{n}.html"></a></td>
+    <td><a class="current" href="Q{n}.html"></a></td>
   </tr>
 </table>
 <table id="question">
@@ -61,14 +61,14 @@ favourite_table <- function(questions, n) {
 </table>
 <table class="navigation">
   <tr>
-    <td class="previous"><a class="previous" href="q{n-1}.html"></a></td>
-    <td class="next"><a class="next" href="q{n+1}.html"></a></td>
+    <td class="previous"><a class="previous" href="Q{n-1}.html"></a></td>
+    <td class="next"><a class="next" href="Q{n+1}.html"></a></td>
   </tr>
 </table>
 </body>
 </html>', rows = .)
 
-  html_file <- file(paste0("q", n, ".html"))
+  html_file <- file(paste0("Q", n, ".html"))
   writeLines(html_doc, html_file)
   close(html_file)
 

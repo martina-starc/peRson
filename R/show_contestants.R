@@ -52,13 +52,13 @@ a.next:hover {{
 </table>
 <table class="navigation">
   <tr>
-    <td><a class="next" href="q1.html"></a></td>
+    <td><a class="next" href="Q1.html"></a></td>
   </tr>
 </table>
 </body>
 </html>', rows = .)
 
-  html_file <- file(paste0("quiz/q0.html"))
+  html_file <- file(paste0("quiz/Q0.html"))
   writeLines(html_doc, html_file)
   close(html_file)
 

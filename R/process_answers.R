@@ -42,7 +42,7 @@ evaluate_answers <- function(answers, n = length(quiz$answers) + 1, correct_valu
           axis.ticks = ggplot2::element_blank(),
           plot.title = ggplot2::element_text(size = 10))
 
-  ggplot2::ggsave(filename = paste0("quiz/a", n, ".png"), plot = results_plot, height = plot_height)
+  ggplot2::ggsave(filename = paste0("quiz/A", n, ".png"), plot = results_plot, height = plot_height)
   if(n %% 4 == 0) show_leaderboard(n = n)
 }
 
@@ -70,6 +70,6 @@ show_leaderboard <- function(answers = quiz$answers, n = length(quiz$answers)) {
                    axis.ticks = ggplot2::element_blank(),
                    plot.title = ggplot2::element_text(size = 15))
   print(leaderboard_plot)
-  ggplot2::ggsave(filename = paste0("quiz/l", n, ".png"), plot = leaderboard_plot, height = 5)
+  ggplot2::ggsave(filename = paste0("quiz/L", n, ".png"), plot = leaderboard_plot, height = 5)
 
 }
