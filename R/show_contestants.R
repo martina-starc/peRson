@@ -58,7 +58,7 @@ a.next:hover {{
 </body>
 </html>', rows = .)
 
-  html_file <- file(paste0("q0.html"))
+  html_file <- file(paste0("quiz/q0.html"))
   writeLines(html_doc, html_file)
   close(html_file)
 

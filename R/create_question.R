@@ -58,7 +58,7 @@ a.next:hover {{
 </html>
 '))
 
-  html_file <- file(paste0("q", n, ".html"))
+  html_file <- file(paste0("quiz/q", n, ".html"))
   writeLines(html_doc, html_file)
   close(html_file)
 
