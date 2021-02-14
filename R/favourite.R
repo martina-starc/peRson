@@ -1,11 +1,11 @@
-favourite_question <- function(n = length(quiz$answers)) {
+favourite_question <- function(n = length(quiz$answers), quiz = quiz.env) {
   quiz$questions %>%
     head(n) %>%
     select(n, person, text) %>%
-    favourite_table(n = n + 1)
+    favourite_table(n = n + 1, quiz = quiz)
 }
 
-favourite_result <- function(answer, n = length(quiz$answers)) {
+favourite_result <- function(answer, n = length(quiz$answers), quiz = quiz.env) {
   fresult <- answer %>%
     tidyr::pivot_longer(everything()) %>%
     mutate(n = as.numeric(value)) %>%
@@ -18,13 +18,13 @@ favourite_result <- function(answer, n = length(quiz$answers)) {
     ) %>%
     arrange(desc(count)) %>%
     na.omit()
-  quiz$favourite_results <<- fresult
+  assign("favourite_results", fresult, envir = quiz)
   fresult %>%
     select(n = count, person, text) %>%
-    favourite_table(n = n + 2)
+    favourite_table(n = n + 2, quiz = quiz)
 }
 
-favourite_table <- function(questions, n) {
+favourite_table <- function(questions, n, quiz = quiz.env) {
   html_doc <- questions %>%
     mutate(bgcolor = quiz$named_colors[person]) %>%
     purrr::pmap(function(bgcolor, text, n, ...) {
@@ -68,7 +68,7 @@ favourite_table <- function(questions, n) {
 </body>
 </html>', rows = .)
 
-  html_file <- file(paste0("Q", n, ".html"))
+  html_file <- file(paste0("quiz/Q", n, ".html"))
   writeLines(html_doc, html_file)
   close(html_file)
 

@@ -1,4 +1,4 @@
-run_demo_quiz <- function() {
+run_demo_quiz <- function(quiz = quiz.env) {
   quiz_setup(demo_questions, get_demo_participants())
   purrr::walk(1:nrow(quiz$questions), create_question)
   show_contestants(quiz$participants$name)

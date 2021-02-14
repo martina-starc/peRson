@@ -1,4 +1,4 @@
-create_question <- function(n) {
+create_question <- function(n, quiz  = quiz.env) {
   question <- quiz$questions[n, ] %>% as.list
   bg_previous <- ifelse(n == 1, quiz$named_colors[["avg"]], quiz$named_colors[unlist(quiz$questions[n - 1, "person"])])
   bg_current <- quiz$named_colors[question$person]

@@ -1,11 +1,13 @@
-quiz_setup <- function(questions, participants, presence = participants$name, shuffle = TRUE) {
+quiz.env <- new.env(parent = emptyenv())
+quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE) {
   dir.create("quiz")
   quiz <- list()
+  quiz$presence <- if (is.null(presence)) { participants$name } else { presence }
   quiz$css_file <- system.file("css", "styles.css", package = "peRson")
   quiz$all_questions <- questions %>%
     { if(shuffle) shuffle_answers(.) else . }
   quiz$questions <- quiz$all_questions %>%
-    filter(person %in% presence) %>%
+    filter(person %in% quiz$presence) %>%
     { if(shuffle) shuffle_questions(.) else . }
   quiz$participants <- participants %>%
     mutate(chose_color = !is.na(color)) %>%
@@ -13,21 +15,21 @@ quiz_setup <- function(questions, participants, presence = participants$name, sh
     purrr::map(process_colors) %>%
     bind_rows() %>%
     mutate(dist = if_else(chose_color, dist, NA_real_)) %>%
-    mutate(present = name %in% presence) %>%
+    mutate(present = name %in% quiz$presence) %>%
     rowwise() %>%
-    mutate(answer_sheet = if_else(present, create_answer_sheet(name), NA_character_)) %>%
+    #mutate(answer_sheet = if_else(present, create_answer_sheet(name), NA_character_)) %>%
     ungroup()
   quiz$named_colors <- with(quiz$participants, c(purrr::set_names(hex, name),
-                                                 "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),
-                                                                        mean(g[chose_color], na.rm = TRUE),
-                                                                        mean(b[chose_color], na.rm = TRUE),
-                                                                        maxColorValue = 255)))
+                                                           "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),
+                                                                                  mean(g[chose_color], na.rm = TRUE),
+                                                                                  mean(b[chose_color], na.rm = TRUE),
+                                                                                  maxColorValue = 255)))
   quiz$question_colors <- quiz$named_colors[quiz$questions$person]
-  quiz$presence <- presence
-  quiz$summary_sheet_id <- create_summary_sheet()
-  quiz$answers <- list()
 
-  quiz <<- quiz
+  #quiz$summary_sheet_id <- create_summary_sheet()
+  quiz$answers <- list()
+  purrr::walk(names(quiz), ~assign(., quiz[[.]], quiz.env))
+
 }
 
 get_color_dist <- function(r, g, b) {
@@ -37,10 +39,10 @@ get_color_dist <- function(r, g, b) {
     colMeans()
 }
 
-process_colors <- function(data) {
-  data %>%
+process_colors <- function(participants) {
+  participants %>%
     rowwise() %>%
-    mutate(color = if_else(is.na(color), random_color(data$color), color)) %>%
+    mutate(color = if_else(is.na(color), random_color(exclude_colors = participants$color), color)) %>%
     mutate(rgb = list(purrr::set_names(grDevices::col2rgb(color), c("r", "g", "b"))),
            hex = gplots::col2hex(color)) %>%
     ungroup() %>%

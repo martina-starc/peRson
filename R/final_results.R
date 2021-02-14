@@ -1,4 +1,4 @@
-final_results <- function() {
+final_results <- function(quiz = quiz.env) {
 
   who_asked <- quiz$questions %>%
     head(length(quiz$answers)) %>%

@@ -1,4 +1,4 @@
-show_contestants <- function(presence, n_per_row = 5) {
+show_contestants <- function(presence, n_per_row = 5, quiz = quiz.env) {
 
   bg_next <- quiz$named_colors[unlist(quiz$questions[1, "person"])]
   pic_file <- system.file("pics", "caty_pexels-kelvin-valerio-617278.jpg", package = "peRson")
