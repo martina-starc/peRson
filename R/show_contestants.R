@@ -1,9 +1,23 @@
-show_contestants <- function(presence, n_per_row = 5, quiz = quiz.env) {
-  bg_next <- quiz$named_colors[unlist(quiz$questions[1, "person"])]
-  pic_file <- system.file("pics", "caty_pexels-kelvin-valerio-617278.jpg", package = "peRson")
+#' Create the quiz intro HTML page with participants' images and colors
+#'
+#' @param presence Vector of present participants. If NULL, taken from quiz
+#'   environment (presence).
+#' @param n_per_row Number of pictures per row.
+#' @param quiz Quiz environment with quiz variables (uses presence,
+#'   named_colors, question_colors, css_file, participants)
+#'
+#' @return Saves Q0.html file.
+#' @export
+#'
+#' @examples
+show_contestants <- function(presence = NULL, n_per_row = 5, quiz = quiz.env) {
+  args <- quiz[c("presence", "named_colors", "participants", "css_file")]
+  args$bg_next <- quiz$question_colors[1]
+  args$presence <- if (!is.null(presence)) presence
 
-  person_tables <- quiz$participants %>%
-    filter(name %in% presence) %>%
+
+  person_tables <- args$participants %>%
+    filter(name %in% args$presence) %>%
     arrange(sample(row_number())) %>%
     purrr::pmap(function(name, image, hex, ...) {
       glue::glue('
@@ -32,7 +46,7 @@ show_contestants <- function(presence, n_per_row = 5, quiz = quiz.env) {
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="{quiz$css_file}">
+<link rel="stylesheet" href="{args$css_file}">
 <style>
 .contestant-wrapper {{
   width: {200 * n_per_row + 20 * (n_per_row - 1)}px;
@@ -40,12 +54,12 @@ show_contestants <- function(presence, n_per_row = 5, quiz = quiz.env) {
 }}
 
 a.next:hover {{
-  background-color: {bg_next};
+  background-color: {args$bg_next};
 }}
 </style>
 </head>
 <body>
-{header_div("Do you know me? QUIZ", quiz$named_colors[\"avg\"])}
+{header_div("Do you know me? QUIZ", args$named_colors[\"avg\"])}
 <table class="contestant-wrapper">
                {rows}
 </table>
