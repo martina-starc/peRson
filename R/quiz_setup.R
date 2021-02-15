@@ -1,11 +1,11 @@
 quiz.env <- new.env(parent = emptyenv())
-quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE) {
+quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE, create_sheets = TRUE) {
   dir.create("quiz")
   quiz <- list()
-  quiz$presence <- if (is.null(presence)) {
-    participants$name
+  if (is.null(presence)) {
+     quiz$presence <- participants$name
   } else {
-    presence
+     quiz$presence <- presence
   }
   quiz$css_file <- system.file("css", "styles.css", package = "peRson")
   quiz$all_questions <- questions %>% {
@@ -22,10 +22,17 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE)
     purrr::map(process_colors) %>%
     bind_rows() %>%
     mutate(dist = if_else(chose_color, dist, NA_real_)) %>%
-    mutate(present = name %in% quiz$presence) %>%
-    rowwise() %>%
-    # mutate(answer_sheet = if_else(present, create_answer_sheet(name), NA_character_)) %>%
-    ungroup()
+    mutate(present = name %in% quiz$presence)
+  if (create_sheets) {
+    quiz$participants$answer_sheet <- purrr::pmap_chr(quiz$participants, function(name, email, present, ...) {
+      if (present) {
+        create_answer_sheet(name, email, length(quiz$questions))
+      } else {
+        NA_character_
+      }
+    })
+    quiz$summary_sheet_id <- create_summary_sheet(quiz$participants, length(quiz$questions))
+  }
   quiz$named_colors <- with(quiz$participants, c(purrr::set_names(hex, name),
     "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),
       mean(g[chose_color], na.rm = TRUE),
@@ -35,7 +42,6 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE)
   ))
   quiz$question_colors <- quiz$named_colors[quiz$questions$person]
 
-  # quiz$summary_sheet_id <- create_summary_sheet()
   quiz$answers <- list()
   purrr::walk(names(quiz), ~ assign(., quiz[[.]], quiz.env))
 }
@@ -66,9 +72,9 @@ random_color <- function(exclude_colors = NA) {
 }
 
 get_question_color <- function(n, question_colors, named_colors) {
-  color <- question_colors[[n]]
-  if (length(color) == 0 | is.na(color)) {
-    color <- named_colors[["avg"]]
+  color <- question_colors[n]
+  if (length(color) == 0 || is.na(color)) {
+    color <- named_colors["avg"]
   }
   color
 }

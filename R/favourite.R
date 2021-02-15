@@ -134,7 +134,7 @@ a.next:hover {{
   </tr>
 </table>
 <table class="favourite">
-{rows}
+{questions}
 </table>
 <table class="navigation">
   <tr>

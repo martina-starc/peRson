@@ -16,7 +16,7 @@
 create_answer_sheet <- function(name, email, n_questions) {
   answer_table <- data.frame(N = 1:(n_questions + 1), Answer = NA, stringsAsFactors = FALSE)
   answer_sheet_id <- googlesheets4::gs4_create(paste0("Answers ", name), sheets = list("Answers" = answer_table))
-  googledrive::drive_share(file = googledrive::as_id(answer_sheet_id), role = "writer", type = "user", emailAddress = email)
+  drive_dribble <- googledrive::drive_share(answer_sheet_id, role = "writer", type = "user", emailAddress = email)
   as.character(answer_sheet_id)
 }
 
@@ -58,7 +58,7 @@ create_summary_sheet <- function(participants, n_questions) {
 #' @export
 #'
 #' @examples
-quiz_clean_drive <- function(sheet_ids = c(quiz$participants$answer_sheet_id, quiz$summary_sheet_id)) {
-  sheet_list <- googledrive::as_id(sheet_ids)
-  purrr::walk(sheet_list, googledrive::drive_trash)
+quiz_clean_drive <- function(sheet_ids = c(quiz.env$participants$answer_sheet, quiz.env$summary_sheet_id)) {
+  sheet_ids %>%
+    purrr::walk(~googledrive::drive_rm(googledrive::as_id(.)))
 }
