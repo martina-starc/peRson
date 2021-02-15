@@ -2,13 +2,20 @@ quiz.env <- new.env(parent = emptyenv())
 quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE) {
   dir.create("quiz")
   quiz <- list()
-  quiz$presence <- if (is.null(presence)) { participants$name } else { presence }
+  quiz$presence <- if (is.null(presence)) {
+    participants$name
+  } else {
+    presence
+  }
   quiz$css_file <- system.file("css", "styles.css", package = "peRson")
-  quiz$all_questions <- questions %>%
-    { if(shuffle) shuffle_answers(.) else . }
+  quiz$all_questions <- questions %>% {
+    if (shuffle) shuffle_answers(.) else .
+  }
   quiz$questions <- quiz$all_questions %>%
     filter(person %in% quiz$presence) %>%
-    { if(shuffle) shuffle_questions(.) else . }
+    {
+      if (shuffle) shuffle_questions(.) else .
+    }
   quiz$participants <- participants %>%
     mutate(chose_color = !is.na(color)) %>%
     split(.$chose_color) %>%
@@ -17,19 +24,20 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE)
     mutate(dist = if_else(chose_color, dist, NA_real_)) %>%
     mutate(present = name %in% quiz$presence) %>%
     rowwise() %>%
-    #mutate(answer_sheet = if_else(present, create_answer_sheet(name), NA_character_)) %>%
+    # mutate(answer_sheet = if_else(present, create_answer_sheet(name), NA_character_)) %>%
     ungroup()
   quiz$named_colors <- with(quiz$participants, c(purrr::set_names(hex, name),
-                                                           "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),
-                                                                                  mean(g[chose_color], na.rm = TRUE),
-                                                                                  mean(b[chose_color], na.rm = TRUE),
-                                                                                  maxColorValue = 255)))
+    "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),
+      mean(g[chose_color], na.rm = TRUE),
+      mean(b[chose_color], na.rm = TRUE),
+      maxColorValue = 255
+    )
+  ))
   quiz$question_colors <- quiz$named_colors[quiz$questions$person]
 
-  #quiz$summary_sheet_id <- create_summary_sheet()
+  # quiz$summary_sheet_id <- create_summary_sheet()
   quiz$answers <- list()
-  purrr::walk(names(quiz), ~assign(., quiz[[.]], quiz.env))
-
+  purrr::walk(names(quiz), ~ assign(., quiz[[.]], quiz.env))
 }
 
 get_color_dist <- function(r, g, b) {
@@ -43,8 +51,10 @@ process_colors <- function(participants) {
   participants %>%
     rowwise() %>%
     mutate(color = if_else(is.na(color), random_color(exclude_colors = participants$color), color)) %>%
-    mutate(rgb = list(purrr::set_names(grDevices::col2rgb(color), c("r", "g", "b"))),
-           hex = gplots::col2hex(color)) %>%
+    mutate(
+      rgb = list(purrr::set_names(grDevices::col2rgb(color), c("r", "g", "b"))),
+      hex = gplots::col2hex(color)
+    ) %>%
     ungroup() %>%
     tidyr::unnest_wider(rgb) %>%
     mutate(dist = get_color_dist(r, g, b))
@@ -55,6 +65,14 @@ random_color <- function(exclude_colors = NA) {
     sample(1)
 }
 
+get_question_color <- function(n, question_colors, named_colors) {
+  color <- question_colors[[n]]
+  if (length(color) == 0 | is.na(color)) {
+    color <- named_colors[["avg"]]
+  }
+  color
+}
+
 #' Randomly shuffle questions in groups
 #'
 #' Divides the questions into groups containing one question per participant,
@@ -63,15 +81,17 @@ random_color <- function(exclude_colors = NA) {
 #' participant won't appear again until a question from every participant is
 #' used.
 #'
-#' @param questions data frame containing quiz questions and a rn variable that
+#' @param questions Data frame containing quiz questions and a rn variable that
 #'   represents the random sequence number of the questions that were provided
 #'   by the same participant
+#' @param shuffle_by Unquoted name of the variable used to create shuffling
+#'   groups.
 #'
 #' @return data frame with shuffled questions
 shuffle_questions <- function(questions, shuffle_by = rn) {
   questions %>%
-    group_by({{shuffle_by}}) %>%
-    arrange({{shuffle_by}}, sample(1:length({{shuffle_by}}))) %>%
+    group_by({{ shuffle_by }}) %>%
+    arrange({{ shuffle_by }}, sample(1:length({{ shuffle_by }}))) %>%
     ungroup() %>%
     mutate(n = row_number()) %>%
     select(n, everything())
@@ -79,8 +99,9 @@ shuffle_questions <- function(questions, shuffle_by = rn) {
 
 shuffle_answers <- function(questions) {
   questions %>%
-    tidyr::pivot_longer(cols = -c(person, text), names_to = c(".value", "type"),
-                        names_pattern = "(image|answer)_([A-D])"
+    tidyr::pivot_longer(
+      cols = -c(person, text), names_to = c(".value", "type"),
+      names_pattern = "(image|answer)_([A-D])"
     ) %>%
     group_by(person, text) %>%
     mutate(type = sample(type, 4)) %>%

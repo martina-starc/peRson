@@ -1,5 +1,4 @@
 show_contestants <- function(presence, n_per_row = 5, quiz = quiz.env) {
-
   bg_next <- quiz$named_colors[unlist(quiz$questions[1, "person"])]
   pic_file <- system.file("pics", "caty_pexels-kelvin-valerio-617278.jpg", package = "peRson")
 
@@ -24,9 +23,9 @@ show_contestants <- function(presence, n_per_row = 5, quiz = quiz.env) {
 ')
     })
 
-  html_doc <- purrr::map(1:(length(person_tables) %/% n_per_row + ifelse(length(person_tables) %% n_per_row > 0, 1, 0)), ~person_tables[(. * n_per_row - n_per_row + 1):(. * n_per_row)]) %>%
-    purrr::map(~paste(unlist(.), collapse = "")) %>%
-    purrr::map(~paste0('<tr>', ., "</tr>\n")) %>%
+  html_doc <- purrr::map(1:(length(person_tables) %/% n_per_row + ifelse(length(person_tables) %% n_per_row > 0, 1, 0)), ~ person_tables[(. * n_per_row - n_per_row + 1):(. * n_per_row)]) %>%
+    purrr::map(~ paste(unlist(.), collapse = "")) %>%
+    purrr::map(~ paste0("<tr>", ., "</tr>\n")) %>%
     unlist() %>%
     paste(collapse = "") %>%
     glue::glue('
@@ -61,5 +60,4 @@ a.next:hover {{
   html_file <- file(paste0("quiz/Q0.html"))
   writeLines(html_doc, html_file)
   close(html_file)
-
 }

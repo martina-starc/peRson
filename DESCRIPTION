@@ -29,4 +29,6 @@ Imports:
     ggplot2,
     glue,
     gplots,
-    plotly
+    plotly,
+    googlesheets4,
+    googledrive

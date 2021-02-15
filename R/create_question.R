@@ -1,13 +1,29 @@
-create_question <- function(n, quiz  = quiz.env) {
-  question <- quiz$questions[n, ] %>% as.list
-  bg_previous <- ifelse(n == 1, quiz$named_colors[["avg"]], quiz$named_colors[unlist(quiz$questions[n - 1, "person"])])
-  bg_current <- quiz$named_colors[question$person]
-  bg_next <- ifelse(n == nrow(quiz$questions), quiz$named_colors[["avg"]], quiz$named_colors[unlist(quiz$questions[n + 1, "person"])])
+#' Create an HTML file with the quiz question
+#'
+#' Creates an HTML file with the question, answers, answer images, image holders
+#' for results and leaderboard and navigation to the previous and next question.
+#'
+#' @param n Sequence number of the quiz question.
+#' @param quiz Quiz environment with quiz variables (uses questions,
+#'   question_colors, named_colors, css_file).
+#'
+#' @return
+#' @export
+#'
+#' @examples
+create_question <- function(n, quiz = quiz.env) {
+  question <- quiz$questions[n, ] %>% as.list()
+  question$n <- n
+  question$bg_previous <- get_question_color(n - 1, question_colors = quiz$question_colors, named_colors = quiz$named_colors)
+  question$bg_current <- get_question_color(n, question_colors = quiz$question_colors, named_colors = quiz$named_colors)
+  question$bg_next <- get_question_color(n + 1, question_colors = quiz$question_colors, named_colors = quiz$named_colors)
+  question$css_file <- quiz$css_file
+
   html_doc <- with(question, glue::glue('
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="{quiz$css_file}">
+<link rel="stylesheet" href="{css_file}">
 <style>
 a.previous:hover {{
   background-color: {bg_previous};
@@ -61,5 +77,4 @@ a.next:hover {{
   html_file <- file(paste0("quiz/Q", n, ".html"))
   writeLines(html_doc, html_file)
   close(html_file)
-
 }
