@@ -1,15 +1,32 @@
-evaluate_answers <- function(answers = NULL, n = NULL, correct_value = NULL, quiz = quiz.env) {
+#' Evaluate the correctness of question answers
+#'
+#' @param answers A data frame with the answers (see [demo_answers] for format).
+#'   If NULL, answers are read from the quiz summary sheet (summary_sheet_id)
+#'   created by [quiz_setup()].
+#' @param n Sequence number of the question to evaluate. If NULL, the next
+#'   question based on the length of saved answers in [quiz.env] is evaluated.
+#' @param correct_answer Correct answer to the question. If NULL, the answer of
+#'   the person who asked the question is taken as the correct answer.
+#' @param quiz Quiz environment with quiz variables (uses summary_sheet_id,
+#'   answers, questions).
+#'
+#' @return Evaluated answers are saved to quiz.env answers list. A plot with
+#'   results is printed and saved to "quiz/A{n}.png".
+#' @export
+#'
+#' @examples
+evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, quiz = quiz.env) {
   if (is.null(answers)) {
     answers <- suppressMessages(read_sheet(quiz$summary_sheet_id, sheet = "Answers"))
   }
   n <- if_else(is.null(n), length(quiz$answers) + 1, n)
 
   answer <- answers[n, ]
-  correct_value <- if_else(is.null(correct_value), answer[[quiz$questions[[n, "person"]]]], correct_value)
+  correct_answer <- if_else(is.null(correct_answer), answer[[quiz$questions[[n, "person"]]]], correct_answer)
 
   answer <- answer %>%
     tidyr::pivot_longer(everything()) %>%
-    mutate(correct = value == correct_value)
+    mutate(correct = value == correct_answer)
 
   quiz_answsers <- quiz$answers
   quiz_answsers[[n]] <- answer
@@ -50,14 +67,33 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_value = NULL, qui
   if (n %% 4 == 0) show_leaderboard(n = n)
 }
 
-show_leaderboard <- function(answers = quiz$answers, n = length(quiz$answers), quiz = quiz.env) {
-  leaderboard_plot <- answers %>%
+
+#' Create the current leaderboard
+#'
+#' @param answers Current list of evaluated answers. If NULL, taken from quiz
+#'   environment.
+#' @param n Current question. If NULL, estimated based on the length of saved
+#'   answers in quiz environment.
+#' @param quiz Quiz environment with quiz variables (uses answers, named_colors,
+#'   presence)
+#'
+#' @return A plot with leaderboard is printed and saved to "quiz/L{n}.png".
+#' @export
+#'
+#' @examples
+show_leaderboard <- function(answers = NULL, n = NULL, quiz = quiz.env) {
+  answers <- if (is.null(answers)) quiz$answers
+  n <- if (is.null(n)) length(quiz$answers)
+
+  current_results <- answers %>%
     bind_rows() %>%
     filter(n <= n) %>%
     group_by(name) %>%
     filter(name %in% quiz$presence) %>%
     summarise(total = sum(correct, na.rm = T), `.groups` = "drop") %>%
-    mutate(name = forcats::fct_reorder(name, total, `.desc` = T)) %>%
+    mutate(name = forcats::fct_reorder(name, total, `.desc` = T))
+
+  leaderboard_plot %>%
     ggplot2::ggplot(ggplot2::aes(name, total)) +
     ggplot2::geom_col(ggplot2::aes(fill = name)) +
     ggplot2::geom_text(ggplot2::aes(label = ..y..), size = 5, vjust = -0.6) +

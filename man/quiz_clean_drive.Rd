@@ -5,7 +5,7 @@
 \title{Deletes the answer sheets}
 \usage{
 quiz_clean_drive(
-  sheet_ids = c(quiz$participants$answer_sheet_id, quiz$summary_sheet_id)
+  sheet_ids = c(quiz.env$participants$answer_sheet, quiz.env$summary_sheet_id)
 )
 }
 \arguments{
