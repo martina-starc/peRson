@@ -28,7 +28,8 @@ shuffled by [shuffle_answers()] and [shuffle_questions()] respectively.}
 
 \item{create_sheets}{If TRUE, a Google Sheet for answers is created for and
 shared with each participant, plus one summary sheet containing imported
-answer sheets.}
+answer sheets (though the sheets need to be linked manually in the sheet
+before answers can be read from it).}
 }
 \value{
 The following variables are assigned to [quiz.env]. \describe{

@@ -7,15 +7,15 @@
 shuffle_questions(questions, shuffle_by = rn)
 }
 \arguments{
-\item{questions}{Data frame containing quiz questions and a rn variable that
-represents the random sequence number of the questions that were provided
-by the same participant}
+\item{questions}{A data frame with quiz questions (see [demo_questions] for
+format) and a rn variable that represents the random sequence number of the
+questions that were provided by the same participant.}
 
 \item{shuffle_by}{Unquoted name of the variable used to create shuffling
 groups.}
 }
 \value{
-data frame with shuffled questions
+A data frame with shuffled questions.
 }
 \description{
 Divides the questions into groups containing one question per participant,

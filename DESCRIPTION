@@ -32,4 +32,5 @@ Imports:
     plotly,
     googlesheets4,
     googledrive,
-    rvest
+    rvest,
+    xml2

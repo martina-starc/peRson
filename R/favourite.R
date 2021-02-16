@@ -77,7 +77,6 @@ favourite_result <- function(answer, n = NULL, quiz = quiz.env) {
 #'   question_colors, named_colors).
 #'
 #' @return
-#' @export
 #'
 #' @examples
 favourite_table <- function(questions, n, quiz = quiz.env) {

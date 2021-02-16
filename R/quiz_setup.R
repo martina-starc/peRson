@@ -11,7 +11,8 @@
 #'   shuffled by [shuffle_answers()] and [shuffle_questions()] respectively.
 #' @param create_sheets If TRUE, a Google Sheet for answers is created for and
 #'   shared with each participant, plus one summary sheet containing imported
-#'   answer sheets.
+#'   answer sheets (though the sheets need to be linked manually in the sheet
+#'   before answers can be read from it).
 #'
 #' @return The following variables are assigned to [quiz.env]. \describe{
 #'   \item{presence}{vector or present participants' names} \item{css_file}{path
@@ -69,18 +70,26 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE,
     )
   ))
   quiz$question_colors <- quiz$named_colors[quiz$questions$person]
-
   quiz$answers <- list()
-  purrr::walk(names(quiz), ~ assign(., quiz[[.]], quiz.env))
+
+  list2env(quiz, envir = quiz.env)
 }
 
-get_color_dist <- function(r, g, b) {
-  data.frame(r, g, b) %>%
-    stats::dist(upper = TRUE) %>%
-    as.matrix() %>%
-    colMeans()
-}
 
+
+#' Process colors chosen by participants
+#'
+#' For participants who didn't choose colors a random color is picked. Colors
+#' are converted to RGB and hex to use in HTML files. Distance from other
+#' participants' colors is calculated.
+#'
+#' @inheritParams quiz_setup
+#'
+#' @return A data frame with random colors chosen for participants who didn't
+#'   choose colors, r, g, b columns with RGB values, hex with hex color value
+#'   and dist with the average distance from other participants' colors.
+#'
+#' @examples
 process_colors <- function(participants) {
   participants %>%
     rowwise() %>%
@@ -94,18 +103,6 @@ process_colors <- function(participants) {
     mutate(dist = get_color_dist(r, g, b))
 }
 
-random_color <- function(exclude_colors = NA) {
-  colors()[!stringr::str_detect(colors(), "(gra|ey)|white") & !(colors() %in% exclude_colors)] %>%
-    sample(1)
-}
-
-get_question_color <- function(n, question_colors, named_colors) {
-  color <- question_colors[n]
-  if (length(color) == 0 || is.na(color)) {
-    color <- named_colors["avg"]
-  }
-  color
-}
 
 #' Randomly shuffle questions in groups
 #'
@@ -115,13 +112,13 @@ get_question_color <- function(n, question_colors, named_colors) {
 #' participant won't appear again until a question from every participant is
 #' used.
 #'
-#' @param questions Data frame containing quiz questions and a rn variable that
-#'   represents the random sequence number of the questions that were provided
-#'   by the same participant
+#' @param questions A data frame with quiz questions (see [demo_questions] for
+#'   format) and a rn variable that represents the random sequence number of the
+#'   questions that were provided by the same participant.
 #' @param shuffle_by Unquoted name of the variable used to create shuffling
 #'   groups.
 #'
-#' @return data frame with shuffled questions
+#' @return A data frame with shuffled questions.
 shuffle_questions <- function(questions, shuffle_by = rn) {
   questions %>%
     group_by({{ shuffle_by }}) %>%
@@ -131,6 +128,15 @@ shuffle_questions <- function(questions, shuffle_by = rn) {
     select(n, everything())
 }
 
+#' Randomly assign answers to A-D
+#'
+#' The answers to questions are randomly assigned to letters A-D.
+#'
+#' @inheritParams quiz_setup
+#'
+#' @return A data frame with shuffled answers.
+#'
+#' @examples
 shuffle_answers <- function(questions) {
   questions %>%
     tidyr::pivot_longer(
@@ -145,15 +151,3 @@ shuffle_answers <- function(questions) {
     mutate(rn = sample(1:length(person)))
 }
 
-get_first_bing_image <- function(search_term) {
-  search_term <- search_term %>%
-    stringr::str_replace_all("[^[:alnum:][:space:]]", "") %>%
-    stringr::str_replace_all(" ", "+")
-  page <- rvest::read_html(glue::glue("https://www.bing.com/images/search?q={search_term}&form=QBLH"))
-  node <- rvest::html_nodes(page, css = "a.thumb")
-  if(length(node) == 0) {
-    get_transparent_image()
-  } else {
-    rvest::html_attr(node[[1]], "href")
-  }
-}
