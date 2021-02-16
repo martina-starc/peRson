@@ -31,4 +31,5 @@ Imports:
     gplots,
     plotly,
     googlesheets4,
-    googledrive
+    googledrive,
+    rvest

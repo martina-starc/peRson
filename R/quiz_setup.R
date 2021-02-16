@@ -144,3 +144,16 @@ shuffle_answers <- function(questions) {
     group_by(person) %>%
     mutate(rn = sample(1:length(person)))
 }
+
+get_first_bing_image <- function(search_term) {
+  search_term <- search_term %>%
+    stringr::str_replace_all("[^[:alnum:][:space:]]", "") %>%
+    stringr::str_replace_all(" ", "+")
+  page <- rvest::read_html(glue::glue("https://www.bing.com/images/search?q={search_term}&form=QBLH"))
+  node <- rvest::html_nodes(page, css = "a.thumb")
+  if(length(node) == 0) {
+    get_transparent_image()
+  } else {
+    rvest::html_attr(node[[1]], "href")
+  }
+}
