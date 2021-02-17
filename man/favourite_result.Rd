@@ -4,12 +4,13 @@
 \alias{favourite_result}
 \title{Create an HTML file with the favourite question answer}
 \usage{
-favourite_result(answer, n = NULL, quiz = quiz.env)
+favourite_result(answer = NULL, n = NULL, quiz = quiz.env)
 }
 \arguments{
 \item{answer}{Data frame with the answer. Must contain one column for each
 participant named with their name and one row with their answers (see
-[demo_favourite]).}
+[demo_favourite]). If NULL it is read from the summary answer sheet created
+by [quiz_setup()].}
 
 \item{n}{Number of questions in the quiz (excluding the favourite questions
 question).}

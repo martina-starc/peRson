@@ -61,7 +61,7 @@ a.next:hover {{
     <td colspan=4><img src="A{n}.png" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
   </tr>
   <tr>
-    <td colspan=4><img src="L{n}.png" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+    <td colspan=4><img class="leaderboard" src="L{n}.png" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
   </tr>
 </table>
 <table class="navigation">

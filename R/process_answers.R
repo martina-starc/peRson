@@ -49,7 +49,7 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
     ggplot2::geom_text(stat = "count", ggplot2::aes(label = ..count..), size = 3, vjust = -0.6) +
     ggplot2::geom_text(ggplot2::aes(y = rn - 0.5, label = name), size = 3) +
     ggplot2::scale_x_discrete(limits = LETTERS[1:4], expand = ggplot2::expansion(add = 0.5)) +
-    ggplot2::scale_y_continuous(expand = ggplot2::expansion(c(0, 0.15)), breaks = 0:100, minor_breaks = NULL) +
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = 0, add = c(0, 1)), breaks = 0:100, minor_breaks = NULL) +
     ggplot2::scale_fill_manual(values = c("FALSE" = "tomato2", "TRUE" = "green3"), guide = "none") +
     ggplot2::theme(
       plot.background = ggplot2::element_blank(),
@@ -113,8 +113,8 @@ show_leaderboard <- function(answers = NULL, n = NULL, quiz = quiz.env) {
       axis.text.x = ggplot2::element_text(size = 10),
       axis.text.y = ggplot2::element_blank(),
       axis.ticks = ggplot2::element_blank(),
-      plot.title = ggplot2::element_text(size = 15)
+      plot.title = ggplot2::element_text(size = 15, hjust = 0.5)
     )
-  print(leaderboard_plot)
-  ggplot2::ggsave(filename = paste0("quiz/L", n, ".png"), plot = leaderboard_plot, height = 5)
+  plot_width <- length(quiz$presence) * 0.6 + 0.3
+  ggplot2::ggsave(filename = paste0("quiz/L", n, ".png"), plot = leaderboard_plot, height = 4, width = plot_width)
 }

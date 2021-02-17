@@ -34,7 +34,8 @@ favourite_question <- function(n = NULL, quiz = quiz.env) {
 #'
 #' @param answer Data frame with the answer. Must contain one column for each
 #'   participant named with their name and one row with their answers (see
-#'   [demo_favourite]).
+#'   [demo_favourite]). If NULL it is read from the summary answer sheet created
+#'   by [quiz_setup()].
 #' @param n Number of questions in the quiz (excluding the favourite questions
 #'   question).
 #' @param quiz Quiz environment with quiz variables (uses answers (length),
@@ -44,9 +45,12 @@ favourite_question <- function(n = NULL, quiz = quiz.env) {
 #' @export
 #'
 #' @examples
-favourite_result <- function(answer, n = NULL, quiz = quiz.env) {
+favourite_result <- function(answer = NULL, n = NULL, quiz = quiz.env) {
   if (is.null(n)) {
     n <- length(quiz$answers)
+  }
+  if (is.null(answer)) {
+    answer <- suppressMessages(read_sheet(quiz$summary_sheet_id, sheet = "Answers"))[n + 1, ]
   }
   fresult <- answer %>%
     tidyr::pivot_longer(everything()) %>%
