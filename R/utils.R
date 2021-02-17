@@ -83,11 +83,12 @@ get_first_bing_image <- function(search_term) {
       stringr::str_replace_all("[^[:alnum:][:space:]]", "") %>%
       stringr::str_replace_all(" ", "+")
     page <- xml2::read_html(glue::glue("https://www.bing.com/images/search?q={search_term}"))
-    node <- rvest::html_nodes(page, css = "a.thumb")
-    if(length(node) == 0) {
+    nodes <- rvest::html_nodes(page, css = "a.thumb")
+    hrefs <- rvest::html_attr(nodes, "href") %>% purrr::keep(!(. %in% suppressMessages(tools::showNonASCII(.))))
+    if(length(hrefs) == 0) {
       get_transparent_pic()
     } else {
-      rvest::html_attr(node[[1]], "href")
+      hrefs[[1]]
     }
   })
 }

@@ -64,7 +64,7 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
     )
 
   ggplot2::ggsave(filename = paste0("quiz/A", n, ".png"), plot = results_plot, height = plot_height)
-  if (n %% 4 == 0) show_leaderboard(n = n)
+  if (n %% 4 == 0) show_leaderboard(n = n, quiz = quiz)
 }
 
 
@@ -82,8 +82,12 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
 #'
 #' @examples
 show_leaderboard <- function(answers = NULL, n = NULL, quiz = quiz.env) {
-  answers <- if (is.null(answers)) quiz$answers
-  n <- if (is.null(n)) length(quiz$answers)
+  if (is.null(answers)) {
+    answers <- quiz$answers
+  }
+  if (is.null(n)) {
+    n <- length(quiz$answers)
+  }
 
   current_results <- answers %>%
     bind_rows() %>%
@@ -93,7 +97,7 @@ show_leaderboard <- function(answers = NULL, n = NULL, quiz = quiz.env) {
     summarise(total = sum(correct, na.rm = T), `.groups` = "drop") %>%
     mutate(name = forcats::fct_reorder(name, total, `.desc` = T))
 
-  leaderboard_plot %>%
+  leaderboard_plot <- current_results %>%
     ggplot2::ggplot(ggplot2::aes(name, total)) +
     ggplot2::geom_col(ggplot2::aes(fill = name)) +
     ggplot2::geom_text(ggplot2::aes(label = ..y..), size = 5, vjust = -0.6) +
