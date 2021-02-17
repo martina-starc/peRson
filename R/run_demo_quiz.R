@@ -13,7 +13,7 @@
 #' @param create_sheets If TRUE, sheets for answers will be created on Google
 #'   Drive as they would be in a real quiz and deleted at the end.
 #'
-#' @return Creates quiz HTML files annd results images.
+#' @return Creates quiz HTML files and results images.
 #' @export
 #'
 #' @examples

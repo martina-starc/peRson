@@ -1,10 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# peRson
+# peRson <img src="man/figures/logo.png" align="right" />
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of peRson is to …
@@ -12,10 +14,10 @@ The goal of peRson is to …
 ## Installation
 
 You can install the released version of peRson from
-[CRAN](https://CRAN.R-project.org) with:
+[Github](https://www.github.com/) with:
 
 ``` r
-install.packages("peRson")
+remotes::install_github("martina-starc/peRson")
 ```
 
 ## Example
