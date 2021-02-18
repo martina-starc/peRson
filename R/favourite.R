@@ -45,13 +45,15 @@ favourite_question <- function(n = NULL, quiz = quiz.env) {
 #' @export
 #'
 #' @examples
-favourite_result <- function(answer = NULL, n = NULL, quiz = quiz.env) {
+favourite_result <- function(answers = NULL, n = NULL, quiz = quiz.env) {
   if (is.null(n)) {
     n <- length(quiz$answers)
   }
-  if (is.null(answer)) {
-    answer <- suppressMessages(read_sheet(quiz$summary_sheet_id, sheet = "Answers"))[n + 1, ]
+  if (is.null(answers)) {
+    answers <- suppressMessages(googlesheets4::read_sheet(quiz$summary_sheet_id, sheet = "Answers")) %>%
+      mutate_all(as.character)
   }
+  answer <- answers[n + 1, ]
   fresult <- answer %>%
     tidyr::pivot_longer(everything()) %>%
     mutate(n = as.numeric(value)) %>%
