@@ -150,4 +150,3 @@ shuffle_answers <- function(questions) {
     group_by(person) %>%
     mutate(rn = sample(1:length(person)))
 }
-

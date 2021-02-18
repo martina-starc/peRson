@@ -60,5 +60,27 @@ create_summary_sheet <- function(participants, n_questions) {
 #' @examples
 quiz_clean_drive <- function(sheet_ids = c(quiz.env$participants$answer_sheet, quiz.env$summary_sheet_id)) {
   sheet_ids %>%
-    purrr::walk(~googledrive::drive_rm(googledrive::as_id(.)))
+    purrr::walk(~ googledrive::drive_rm(googledrive::as_id(.)))
+}
+
+
+#' Fill demo answer sheets with answers for testing purposes
+#'
+#' @param quiz Quiz environment with quiz variables (uses participants).
+#' @param answers Answers to write into the sheets (see [demo_answers] for
+#'   format).
+#'
+#' @return Fills the answer sheets created by [quiz_setup()] with answers, so
+#'   you can test [evaluate_answers()].
+#' @export
+fill_demo_answer_sheets <- function(quiz = quiz.env, answers = demo_answers) {
+  quiz.env$participants %>%
+    filter(present) %>%
+    purrr::pwalk(function(name, answer_sheet, ...) {
+      googlesheets4::range_write(answer_sheet,
+        data = answers[name],
+        sheet = "Answers", range = "B2",
+        col_names = FALSE
+      )
+    })
 }

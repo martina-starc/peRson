@@ -28,7 +28,7 @@ for format).}
 Drive as they would be in a real quiz and deleted at the end.}
 }
 \value{
-Creates quiz HTML files annd results images.
+Creates quiz HTML files and results images.
 }
 \description{
 Setup the quiz, create questions, evaluate answers, favourite question and

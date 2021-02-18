@@ -5,7 +5,7 @@
 \alias{demo_answers}
 \title{Demo quiz answers}
 \format{
-A data frame with 21 rows and 7 variables:
+A data frame with 22 rows and 7 variables:
 \describe{
   \item{Beverly}{Beverly's answers}
   \item{Caty}{Caty's answers}

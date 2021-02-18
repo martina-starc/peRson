@@ -85,7 +85,7 @@ get_first_bing_image <- function(search_term) {
     page <- xml2::read_html(glue::glue("https://www.bing.com/images/search?q={search_term}"))
     nodes <- rvest::html_nodes(page, css = "a.thumb")
     hrefs <- rvest::html_attr(nodes, "href") %>% purrr::keep(!(. %in% suppressMessages(tools::showNonASCII(.))))
-    if(length(hrefs) == 0) {
+    if (length(hrefs) == 0) {
       get_transparent_pic()
     } else {
       hrefs[[1]]
