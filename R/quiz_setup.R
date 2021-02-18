@@ -43,7 +43,7 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE,
   quiz$questions <- quiz$all_questions %>%
     filter(person %in% quiz$presence) %>%
     {
-      if (shuffle) shuffle_questions(.) else .
+      if (shuffle) shuffle_questions(.) else mutate(., n = row_number())
     }
   quiz$participants <- participants %>%
     mutate(chose_color = !is.na(color)) %>%
@@ -55,12 +55,12 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE,
   if (create_sheets) {
     quiz$participants$answer_sheet <- purrr::pmap_chr(quiz$participants, function(name, email, present, ...) {
       if (present) {
-        create_answer_sheet(name, email, length(quiz$questions))
+        create_answer_sheet(name, email, nrow(quiz$questions))
       } else {
         NA_character_
       }
     })
-    quiz$summary_sheet_id <- create_summary_sheet(quiz$participants, length(quiz$questions))
+    quiz$summary_sheet_id <- create_summary_sheet(quiz$participants, nrow(quiz$questions))
   }
   quiz$named_colors <- with(quiz$participants, c(purrr::set_names(hex, name),
     "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),

@@ -11,10 +11,11 @@
 #'
 #' @examples
 show_contestants <- function(presence = NULL, n_per_row = 5, quiz = quiz.env) {
-  args <- as.list.environment(quiz)[c("presence", "named_colors", "participants", "css_file")]
+  args <- as.list(quiz)[c("presence", "named_colors", "participants", "css_file")]
   args$bg_next <- quiz$question_colors[1]
-  args$presence <- if (!is.null(presence)) presence
-
+  if (!is.null(presence)) {
+    args$presence <- presence
+  }
 
   person_tables <- args$participants %>%
     filter(name %in% args$presence) %>%

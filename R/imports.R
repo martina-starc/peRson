@@ -45,7 +45,7 @@ quiz.env <- new.env(parent = emptyenv())
 #'
 #' A dataset containing answers provided by fixional quiz participants.
 #'
-#' @format A data frame with 21 rows and 7 variables:
+#' @format A data frame with 22 rows and 7 variables:
 #' \describe{
 #'   \item{Beverly}{Beverly's answers}
 #'   \item{Caty}{Caty's answers}
@@ -56,20 +56,3 @@ quiz.env <- new.env(parent = emptyenv())
 #'   \item{Teddy}{Teddy's answers}
 #' }
 "demo_answers"
-
-
-#' Demo quiz favourite question
-#'
-#' A dataset containing the favourite question provided by fixional quiz participants.
-#'
-#' @format A data frame with 1 row and 7 variables:
-#' \describe{
-#'   \item{Beverly}{Beverly's favourite question}
-#'   \item{Caty}{Caty's favourite question}
-#'   \item{Doug}{Doug's favourite question}
-#'   \item{Drake}{Drake's favourite question}
-#'   \item{Fawn}{Fawn's favourite question}
-#'   \item{Spike}{Spike's favourite question}
-#'   \item{Teddy}{Teddy's favourite question}
-#' }
-"demo_favourite"
