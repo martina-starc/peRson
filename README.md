@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# peRson <img src="man/figures/logo.png" align="right" width="200"/>
+# peRson <img src="man/figures/logo.png" align="right" width=150/>
 
 <!-- badges: start -->
 
@@ -35,7 +35,6 @@ library(peRson)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
-## basic example code
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`?

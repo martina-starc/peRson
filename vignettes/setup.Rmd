@@ -1,0 +1,80 @@
+---
+title: "setup"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{setup}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+To set up your quiz, you'll first need to prepare the data about your participants and the questions they provided. You can check the proper format in the demo datasets.
+```{r demo_participants}
+library(peRson)
+devtools::load_all()
+demo_participants
+```
+Each participant needs a name, a color they can choose from `colors()`, a path to their photo and their email address. Images will look best if they are square and grayscale.
+```{r demo_questions}
+demo_questions
+```
+Each participant should send some questions about themselves and provide 4 alternative answers. But they shouldn't tell you what is the correct answer, so that also you as the quiz master can participate. 
+
+The questions data frame should contain:
+
+* the name of the person asking the question (person) - the same as the name in the participants data frame
+* the question text containing the name of the person (i.e. What is Caty's favourite book?)
+* 4 answers to the question in columns answer_A-answer_D
+* 4 images to illustrate the answers in columns image_A-image_D (optional, can be left blank, but the columns need to be included in the data frame)
+
+Participants can choose their own question images and send them as a file or a link to an online image. You need to make sure that the link works or, if they send files, to input the correct path based on your quiz working directory. The quiz will be created in a quiz subfolder in your working directory, it's easiest if you put the images in there as well.
+
+For now, let's work with the demo data to set up our first quiz. For the demo images to corectly display on your local machine, use `get_demo_participants`. The function will get the correct paths to the images. 
+
+```{r get_demo_participants}
+participants <- get_demo_participants()
+```
+
+```{r add_bing_images}
+questions <- demo_questions %>%
+  add_bing_images()
+questions
+```
+
+```{r quiz_setup}
+quiz_setup(questions, participants, shuffle = FALSE, create_sheets = TRUE)
+as.list(quiz.env)
+```
+
+```{r show_contestants}
+show_contestants()
+```
+
+```{r create_question}
+purrr::walk(1:nrow(quiz.env$questions), create_question)
+favourite_question(nrow(quiz.env$questions))
+```
+
+```{r evaluate_answers}
+fill_demo_answer_sheets()
+evaluate_answers()
+evaluate_answers()
+purrr::walk(3:21, ~evaluate_answers())
+```
+
+```{r favourite_result}
+favourite_result()
+```
+
+```{r final_results}
+final_results()
+```
+
+```{r quiz_clean_drive}
+quiz_clean_drive()
+```
