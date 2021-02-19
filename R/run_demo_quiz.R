@@ -32,6 +32,11 @@ run_demo_quiz <- function(questions = demo_questions,
   if (create_sheets) quiz_clean_drive()
 }
 
+
+#' Get demo participants data frame
+#'
+#' @return A data frame with demo participant and correct paths to their images.
+#' @export
 get_demo_participants <- function() {
   demo_participants %>%
     mutate(image = system.file("pics", image, package = "peRson"))

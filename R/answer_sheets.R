@@ -60,7 +60,7 @@ create_summary_sheet <- function(participants, n_questions) {
 #' @examples
 quiz_clean_drive <- function(sheet_ids = c(quiz.env$participants$answer_sheet, quiz.env$summary_sheet_id)) {
   sheet_ids %>%
-    purrr::walk(~ googledrive::drive_rm(googledrive::as_id(.)))
+    purrr::walk(~ googledrive::drive_trash(googledrive::as_id(.)))
 }
 
 
