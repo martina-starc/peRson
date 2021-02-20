@@ -4,12 +4,10 @@
 \alias{quiz_clean_drive}
 \title{Deletes the answer sheets}
 \usage{
-quiz_clean_drive(
-  sheet_ids = c(quiz.env$participants$answer_sheet, quiz.env$summary_sheet_id)
-)
+quiz_clean_drive(quiz = getOption("peRson.quiz"))
 }
 \arguments{
-\item{sheet_ids}{Vector of string sheet ids.}
+\item{quiz}{}
 }
 \value{
 No result, just a drive cleaned of quiz traces.

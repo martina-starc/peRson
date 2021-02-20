@@ -4,7 +4,7 @@
 \alias{favourite_table}
 \title{Create an HTML favourite question table}
 \usage{
-favourite_table(questions, n, quiz = quiz.env)
+favourite_table(questions, n, quiz = getOption("peRson.quiz"))
 }
 \arguments{
 \item{questions}{Data frame with questions to include in the table (uses n,

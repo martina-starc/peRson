@@ -4,7 +4,7 @@
 \alias{show_leaderboard}
 \title{Create the current leaderboard}
 \usage{
-show_leaderboard(answers = NULL, n = NULL, quiz = quiz.env)
+show_leaderboard(answers = NULL, n = NULL, quiz = getOption("peRson.quiz"))
 }
 \arguments{
 \item{answers}{Current list of evaluated answers. If NULL, taken from quiz

@@ -1,11 +1,6 @@
 #' @import dplyr
 NULL
 
-#' Quiz environment
-#'
-#' An empty environment that will contain the variables created by quiz generating functions [quiz_setup()], [evaluate_answers()], [favourite_answer()].
-quiz.env <- new.env(parent = emptyenv())
-
 
 #' Demo quiz participants
 #'

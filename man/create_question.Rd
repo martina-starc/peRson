@@ -4,7 +4,7 @@
 \alias{create_question}
 \title{Create an HTML file with the quiz question}
 \usage{
-create_question(n, quiz = quiz.env)
+create_question(n, quiz = getOption("peRson.quiz"))
 }
 \arguments{
 \item{n}{Sequence number of the quiz question.}

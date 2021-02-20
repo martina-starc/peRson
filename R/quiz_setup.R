@@ -14,7 +14,7 @@
 #'   answer sheets (though the sheets need to be linked manually in the sheet
 #'   before answers can be read from it).
 #'
-#' @return The following variables are assigned to [quiz.env]. \describe{
+#' @return A quiz environment with the following variables. \describe{
 #'   \item{presence}{vector or present participants' names} \item{css_file}{path
 #'   to css file used to style the HTML quiz files} \item{all_questions}{data
 #'   frame with all the provided questions from the questions data frame
@@ -72,6 +72,7 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE,
   quiz$question_colors <- quiz$named_colors[quiz$questions$person]
   quiz$answers <- list()
 
+  quiz.env <- new.env(parent = emptyenv())
   list2env(quiz, envir = quiz.env)
 }
 

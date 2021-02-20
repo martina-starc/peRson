@@ -8,7 +8,7 @@ evaluate_answers(
   answers = NULL,
   n = NULL,
   correct_answer = NULL,
-  quiz = quiz.env
+  quiz = getOption("peRson.quiz")
 )
 }
 \arguments{
@@ -17,7 +17,8 @@ If NULL, answers are read from the quiz summary sheet (summary_sheet_id)
 created by [quiz_setup()].}
 
 \item{n}{Sequence number of the question to evaluate. If NULL, the next
-question based on the length of saved answers in [quiz.env] is evaluated.}
+question based on the length of saved answers in the quiz environment is
+evaluated.}
 
 \item{correct_answer}{Correct answer to the question. If NULL, the answer of
 the person who asked the question is taken as the correct answer.}
@@ -26,8 +27,8 @@ the person who asked the question is taken as the correct answer.}
 answers, questions).}
 }
 \value{
-Evaluated answers are saved to quiz.env answers list. A plot with
-  results is printed and saved to "quiz/A{n}.png".
+Evaluated answers are saved to the quiz environment answers list. A
+  plot with results is printed and saved to "quiz/A{n}.png".
 }
 \description{
 Evaluate the correctness of question answers

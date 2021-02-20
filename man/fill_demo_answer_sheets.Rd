@@ -4,7 +4,10 @@
 \alias{fill_demo_answer_sheets}
 \title{Fill demo answer sheets with answers for testing purposes}
 \usage{
-fill_demo_answer_sheets(quiz = quiz.env, answers = demo_answers)
+fill_demo_answer_sheets(
+  quiz = getOption("peRson.quiz"),
+  answers = demo_answers
+)
 }
 \arguments{
 \item{quiz}{Quiz environment with quiz variables (uses participants).}

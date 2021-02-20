@@ -22,10 +22,11 @@ run_demo_quiz <- function(questions = demo_questions,
                           answers = demo_answers,
                           favourite = demo_favourite,
                           create_sheets = FALSE) {
-  quiz_setup(questions, participants, create_sheets = create_sheets)
-  purrr::walk(1:nrow(quiz.env$questions), create_question)
-  show_contestants(quiz.env$participants$name)
-  purrr::walk(1:nrow(quiz.env$questions), ~ evaluate_answers(answers))
+  quiz <- quiz_setup(questions, participants, create_sheets = create_sheets)
+  options(peRson.quiz = quiz)
+  purrr::walk(1:nrow(quiz$questions), create_question)
+  show_contestants(quiz$participants$name)
+  purrr::walk(1:nrow(quiz$questions), ~ evaluate_answers(answers))
   favourite_question()
   favourite_result(favourite)
   final_results()

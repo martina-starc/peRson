@@ -4,18 +4,19 @@
 #'   If NULL, answers are read from the quiz summary sheet (summary_sheet_id)
 #'   created by [quiz_setup()].
 #' @param n Sequence number of the question to evaluate. If NULL, the next
-#'   question based on the length of saved answers in [quiz.env] is evaluated.
+#'   question based on the length of saved answers in the quiz environment is
+#'   evaluated.
 #' @param correct_answer Correct answer to the question. If NULL, the answer of
 #'   the person who asked the question is taken as the correct answer.
 #' @param quiz Quiz environment with quiz variables (uses summary_sheet_id,
 #'   answers, questions).
 #'
-#' @return Evaluated answers are saved to quiz.env answers list. A plot with
-#'   results is printed and saved to "quiz/A{n}.png".
+#' @return Evaluated answers are saved to the quiz environment answers list. A
+#'   plot with results is printed and saved to "quiz/A{n}.png".
 #' @export
 #'
 #' @examples
-evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, quiz = quiz.env) {
+evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(answers)) {
     answers <- suppressMessages(googlesheets4::read_sheet(quiz$summary_sheet_id, sheet = "Answers")) %>%
       mutate_all(as.character)
@@ -82,7 +83,7 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
 #' @export
 #'
 #' @examples
-show_leaderboard <- function(answers = NULL, n = NULL, quiz = quiz.env) {
+show_leaderboard <- function(answers = NULL, n = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(answers)) {
     answers <- quiz$answers
   }

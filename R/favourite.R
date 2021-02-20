@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-favourite_question <- function(n = NULL, quiz = quiz.env) {
+favourite_question <- function(n = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(n)) {
     n <- length(quiz$answers)
   }
@@ -45,7 +45,7 @@ favourite_question <- function(n = NULL, quiz = quiz.env) {
 #' @export
 #'
 #' @examples
-favourite_result <- function(answers = NULL, n = NULL, quiz = quiz.env) {
+favourite_result <- function(answers = NULL, n = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(n)) {
     n <- length(quiz$answers)
   }
@@ -85,7 +85,7 @@ favourite_result <- function(answers = NULL, n = NULL, quiz = quiz.env) {
 #' @return
 #'
 #' @examples
-favourite_table <- function(questions, n, quiz = quiz.env) {
+favourite_table <- function(questions, n, quiz = getOption("peRson.quiz")) {
   args <- list(
     n = n,
     css_file = quiz$css_file,

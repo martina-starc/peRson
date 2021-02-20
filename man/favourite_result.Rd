@@ -4,7 +4,7 @@
 \alias{favourite_result}
 \title{Create an HTML file with the favourite question answer}
 \usage{
-favourite_result(answers = NULL, n = NULL, quiz = quiz.env)
+favourite_result(answers = NULL, n = NULL, quiz = getOption("peRson.quiz"))
 }
 \arguments{
 \item{n}{Number of questions in the quiz (excluding the favourite questions

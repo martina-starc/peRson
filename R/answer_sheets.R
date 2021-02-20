@@ -52,15 +52,15 @@ create_summary_sheet <- function(participants, n_questions) {
 #'
 #' Puts the participants' answer sheets and the summary answer sheet into drive trash.
 #'
-#' @param sheet_ids Vector of string sheet ids.
+#' @param quiz
 #'
 #' @return No result, just a drive cleaned of quiz traces.
 #' @export
 #'
 #' @examples
-quiz_clean_drive <- function(sheet_ids = c(quiz.env$participants$answer_sheet, quiz.env$summary_sheet_id)) {
-  sheet_ids %>%
-    purrr::walk(~ googledrive::drive_trash(googledrive::as_id(.)))
+quiz_clean_drive <- function(quiz = getOption("peRson.quiz")) {
+  sheet_ids <- c(quiz$participants$answer_sheet, quiz$summary_sheet_id)
+  purrr::walk(sheet_ids, ~ googledrive::drive_trash(googledrive::as_id(.)))
 }
 
 
@@ -73,8 +73,8 @@ quiz_clean_drive <- function(sheet_ids = c(quiz.env$participants$answer_sheet, q
 #' @return Fills the answer sheets created by [quiz_setup()] with answers, so
 #'   you can test [evaluate_answers()].
 #' @export
-fill_demo_answer_sheets <- function(quiz = quiz.env, answers = demo_answers) {
-  quiz.env$participants %>%
+fill_demo_answer_sheets <- function(quiz = getOption("peRson.quiz"), answers = demo_answers) {
+  quiz$participants %>%
     filter(present) %>%
     purrr::pwalk(function(name, answer_sheet, ...) {
       googlesheets4::range_write(answer_sheet,

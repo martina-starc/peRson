@@ -4,7 +4,7 @@
 \alias{favourite_question}
 \title{Create an HTML file with the favourite question question}
 \usage{
-favourite_question(n = NULL, quiz = quiz.env)
+favourite_question(n = NULL, quiz = getOption("peRson.quiz"))
 }
 \arguments{
 \item{n}{Number of questions to include in the table.}

@@ -52,10 +52,11 @@ Once you're ready to start your quiz, run `quiz_setup`. You'll need to provide y
 By default, the answers (which answer is under which letter) and the order of the questions will be shuffled in rounds (each round will contain one question from each participant). But if you want to control the order of questions and answers, you can turn this off. 
 For this demonstration we'll also turn off create_sheets. For the real quiz, keep in TRUE, so that `quiz_setup` will create an answer sheet on your Google Drive for each participant and give them write access. 
 ```{r, eval = FALSE}
-quiz_setup(questions, participants)
-as.list(quiz.env)
+quiz <- quiz_setup(questions, participants)
+as.list(quiz)
+options(peRson.quiz = quiz)
 ```
-`quiz_setup` will prepare all the data necessary to create quiz pages and save it into the quiz environment which is a global variable in the package (`quiz.env`). You can check what was done by listing the variables.
+`quiz_setup` will prepare all the data necessary to create quiz pages and save it into the quiz environment. Save the environment and assign it as a global option. The quiz functions will be able to access the environment via global options and you won't have to include it in the arguments. You can check what was done by listing the variables in the environment.
 In addition to participants' answer sheet, a summary sheet with imported answers from individual sheets will be created. However, in order for the imports to work, you'll need to go to your drive, open the summary sheet and manually link the sheets. You can do this while your participants check their emails and open their answer sheets. The imports are an extra step, but this have the advantage of only accessing one sheet for answers and you can also check it during the quiz to see when all participants have answered the questions (with a bit of lag).
 
 
@@ -66,11 +67,11 @@ show_contestants()
 ```
 Next, create the question pages with `create_question`. You can do it in a loop to create them all in one step. In our example, the function will create pages Q1.html-Q18.html.
 ```{r, eval = FALSE}
-purrr::walk(1:nrow(quiz.env$questions), create_question)
+purrr::walk(1:nrow(quiz$questions), create_question)
 ```
 You can also already create a page for favourite question (Q19.html). If for some reason you need to cut the quiz short, you can run it again before ending the quiz. 
 ```{r, eval = FALSE}
-favourite_question(nrow(quiz.env$questions))
+favourite_question(nrow(quiz$questions))
 ```
 Just for the purpose of demonstration, we will fill the demo answers sheets with all the answers, but of course in the real quiz you don't have to do this step, because your participants will enter answers during the quiz. 
 ```{r, eval = FALSE}

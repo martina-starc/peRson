@@ -4,7 +4,11 @@
 \alias{show_contestants}
 \title{Create the quiz intro HTML page with participants' images and colors}
 \usage{
-show_contestants(presence = NULL, n_per_row = 5, quiz = quiz.env)
+show_contestants(
+  presence = NULL,
+  n_per_row = 5,
+  quiz = getOption("peRson.quiz")
+)
 }
 \arguments{
 \item{presence}{Vector of present participants. If NULL, taken from quiz

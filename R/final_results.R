@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-final_results <- function(quiz = quiz.env) {
+final_results <- function(quiz = getOption("peRson.quiz")) {
   who_asked <- quiz$questions %>%
     head(length(quiz$answers)) %>%
     select(n, person)

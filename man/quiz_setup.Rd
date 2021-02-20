@@ -32,7 +32,7 @@ answer sheets (though the sheets need to be linked manually in the sheet
 before answers can be read from it).}
 }
 \value{
-The following variables are assigned to [quiz.env]. \describe{
+A quiz environment with the following variables. \describe{
   \item{presence}{vector or present participants' names} \item{css_file}{path
   to css file used to style the HTML quiz files} \item{all_questions}{data
   frame with all the provided questions from the questions data frame

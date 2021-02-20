@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-create_question <- function(n, quiz = quiz.env) {
+create_question <- function(n, quiz = getOption("peRson.quiz")) {
   question <- quiz$questions[n, ] %>% as.list()
   question$n <- n
   question$bg_previous <- get_question_color(n - 1, question_colors = quiz$question_colors, named_colors = quiz$named_colors)

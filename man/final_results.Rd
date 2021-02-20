@@ -4,7 +4,7 @@
 \alias{final_results}
 \title{Create an HTML file with final quiz results}
 \usage{
-final_results(quiz = quiz.env)
+final_results(quiz = getOption("peRson.quiz"))
 }
 \arguments{
 \item{quiz}{Quiz environment with quiz variables (uses questions, answers,

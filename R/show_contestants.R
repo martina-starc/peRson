@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-show_contestants <- function(presence = NULL, n_per_row = 5, quiz = quiz.env) {
+show_contestants <- function(presence = NULL, n_per_row = 5, quiz = getOption("peRson.quiz")) {
   args <- as.list(quiz)[c("presence", "named_colors", "participants", "css_file")]
   args$bg_next <- quiz$question_colors[1]
   if (!is.null(presence)) {
