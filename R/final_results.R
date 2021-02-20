@@ -47,9 +47,9 @@ final_results <- function(quiz = getOption("peRson.quiz")) {
   badge_winners$random <- totals %>%
     filter(total > nrow(who_asked) / 4) %>%
     pull(name)
-  badge_winners$cointoss <- totals %>%
-    filter(prob < 0.05) %>%
-    pull(name)
+  #badge_winners$cointoss <- totals %>%
+  #  filter(prob < 0.05) %>%
+  #  pull(name)
   badge_winners$monkey <- totals %>%
     filter(prob2 < 0.05) %>%
     pull(name)

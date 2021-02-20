@@ -47,8 +47,18 @@ get_question_color <- function(n, question_colors, named_colors) {
 #'
 #' @return A random color name
 random_color <- function(exclude_colors = NA) {
-  colors()[!stringr::str_detect(colors(), "(gra|ey)|white") & !(colors() %in% exclude_colors)] %>%
-    sample(1)
+  colors() %>%
+  purrr::set_names() %>%
+  grDevices::col2rgb() %>%
+  grDevices::rgb2hsv() %>%
+  t() %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("color_name") %>%
+  filter(v > 0.5, s > 0.25) %>%
+  filter(!stringr::str_detect(color_name, "(gra|ey)|white|brown"),
+         !(color_name %in% exclude_colors)) %>%
+  pull(color_name) %>%
+  sample(1)
 }
 
 #' Calculate distances between colors in RGB space
