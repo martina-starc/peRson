@@ -10,14 +10,14 @@ show_leaderboard(answers = NULL, n = NULL, quiz = getOption("peRson.quiz"))
 \item{answers}{Current list of evaluated answers. If NULL, taken from quiz
 environment.}
 
-\item{n}{Current question. If NULL, estimated based on the length of saved
-answers in quiz environment.}
+\item{n}{Current question. If NULL, taken from the length of saved answers in
+quiz environment.}
 
 \item{quiz}{Quiz environment with quiz variables (uses answers, named_colors,
 presence)}
 }
 \value{
-A plot with leaderboard is printed and saved to "quiz/L{n}.png".
+A plot with leaderboard is saved to "quiz/L{n}.png".
 }
 \description{
 Create the current leaderboard

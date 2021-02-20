@@ -7,10 +7,8 @@
 #'   presence, all_questions, favourite_results, participants, named_colors,
 #'   css_file)
 #'
-#' @return
+#' @return Writes quiz/Q{{n_questions+3}}.html file.
 #' @export
-#'
-#' @examples
 final_results <- function(quiz = getOption("peRson.quiz")) {
   who_asked <- quiz$questions %>%
     head(length(quiz$answers)) %>%
@@ -47,7 +45,7 @@ final_results <- function(quiz = getOption("peRson.quiz")) {
   badge_winners$random <- totals %>%
     filter(total > nrow(who_asked) / 4) %>%
     pull(name)
-  #badge_winners$cointoss <- totals %>%
+  # badge_winners$cointoss <- totals %>%
   #  filter(prob < 0.05) %>%
   #  pull(name)
   badge_winners$monkey <- totals %>%
@@ -74,7 +72,7 @@ final_results <- function(quiz = getOption("peRson.quiz")) {
     distinct(person) %>%
     pull(person)
 
-  badge_winners$mean <- quiz$participants %>%
+  badge_winners$average <- quiz$participants %>%
     filter(dist == min(dist, na.rm = TRUE)) %>%
     distinct(name) %>%
     pull(name)
@@ -86,14 +84,14 @@ final_results <- function(quiz = getOption("peRson.quiz")) {
   badge_winners <- badge_winners %>%
     purrr::map(~ data.frame(name = .)) %>%
     bind_rows(`.id` = "badge") %>%
-    mutate(importance = factor(badge, levels = c("winner", "top3", "monkey", "cointoss", "random", "favourite", "difficult", "easy", "unique", "mean", "send", "participate"))) %>%
+    mutate(importance = factor(badge, levels = c("winner", "top3", "monkey", "cointoss", "random", "favourite", "difficult", "easy", "unique", "average", "send", "participate"))) %>%
     arrange(importance) %>%
     split(.$name) %>%
     purrr::map(~ pull(., badge))
 
   badge_labels <- purrr::set_names(
     c("Quiz winner", "Top 3", "Above monkeys", "p < 0.05", "Above random", "Favourite question", "Difficult question", "Easy question", "Unique colour", "Average color", "Sent questions", "Participated"),
-    c("winner", "top3", "monkey", "cointoss", "random", "favourite", "difficult", "easy", "unique", "mean", "send", "participate")
+    c("winner", "top3", "monkey", "cointoss", "random", "favourite", "difficult", "easy", "unique", "average", "send", "participate")
   )
 
   sorted_names <- badge_winners %>%
@@ -111,7 +109,9 @@ final_results <- function(quiz = getOption("peRson.quiz")) {
       n_badges <- length(badge_winners[[name]])
       purrr::map(badge_winners[[name]], function(badge) {
         default_badge <- system.file("pics", glue::glue("black_{badge}.png"), package = "peRson")
-        glue::glue('<img src="{name}_{badge}.png" title="{badge_labels[[badge]]}" style="display:inline-block" onerror="this.onerror=null; this.src=\'{default_badge}\'"></img>', name = name, badge = badge)
+        glue::glue('<img src="{name}_{badge}.png" title="{badge_labels[[badge]]}" style="display:inline-block" onerror="this.onerror=null; this.src=\'{default_badge}\'"></img>',
+          name = name, badge = badge
+        )
       }) %>%
         paste(collapse = "") %>%
         glue::glue('

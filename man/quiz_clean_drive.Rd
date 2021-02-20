@@ -7,10 +7,10 @@
 quiz_clean_drive(quiz = getOption("peRson.quiz"))
 }
 \arguments{
-\item{quiz}{}
+\item{quiz}{Quiz environment with quiz variables.}
 }
 \value{
-No result, just a drive cleaned of quiz traces.
+No result, just trashes the quiz sheets.
 }
 \description{
 Puts the participants' answer sheets and the summary answer sheet into drive trash.

@@ -7,10 +7,8 @@
 #' @param quiz Quiz environment with quiz variables (uses questions,
 #'   question_colors, named_colors, css_file).
 #'
-#' @return
+#' @return Writes quiz/Q{{n}}.html file.
 #' @export
-#'
-#' @examples
 create_question <- function(n, quiz = getOption("peRson.quiz")) {
   question <- quiz$questions[n, ] %>% as.list()
   question$n <- n

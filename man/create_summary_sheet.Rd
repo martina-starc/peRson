@@ -16,7 +16,7 @@ The id of the sheet as a character string.
 }
 \description{
 The function creates a Google Sheet on Google Drive containing links to the
-participant answer sheets (created with [create_answer_sheet()]). The sheet
+participants' answer sheets (created with [create_answer_sheet()]). The sheet
 contains one column per participant and n_questions + 1 rows (additional row
 is for the favourite question). Import range functions are inserted into the
 first row, however, you need to go to the file and manually link the sheets

@@ -12,10 +12,8 @@
 #'   answers, questions).
 #'
 #' @return Evaluated answers are saved to the quiz environment answers list. A
-#'   plot with results is printed and saved to "quiz/A{n}.png".
+#'   plot with results is saved to "quiz/A{{n}}.png".
 #' @export
-#'
-#' @examples
 evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(answers)) {
     answers <- suppressMessages(googlesheets4::read_sheet(quiz$summary_sheet_id, sheet = "Answers")) %>%
@@ -66,7 +64,7 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
     )
 
   ggplot2::ggsave(filename = paste0("quiz/A", n, ".png"), plot = results_plot, height = plot_height)
-  if (n %% 4 == 0) show_leaderboard(n = n, quiz = quiz)
+  if (n %% 4 == 0 | n == nrows(quiz$questions)) show_leaderboard(n = n, quiz = quiz)
 }
 
 
@@ -74,15 +72,13 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
 #'
 #' @param answers Current list of evaluated answers. If NULL, taken from quiz
 #'   environment.
-#' @param n Current question. If NULL, estimated based on the length of saved
-#'   answers in quiz environment.
+#' @param n Current question. If NULL, taken from the length of saved answers in
+#'   quiz environment.
 #' @param quiz Quiz environment with quiz variables (uses answers, named_colors,
 #'   presence)
 #'
-#' @return A plot with leaderboard is printed and saved to "quiz/L{n}.png".
+#' @return A plot with leaderboard is saved to "quiz/L{n}.png".
 #' @export
-#'
-#' @examples
 show_leaderboard <- function(answers = NULL, n = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(answers)) {
     answers <- quiz$answers

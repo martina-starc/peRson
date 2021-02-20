@@ -25,7 +25,7 @@ for format).}
 for format).}
 
 \item{create_sheets}{If TRUE, sheets for answers will be created on Google
-Drive as they would be in a real quiz and deleted at the end.}
+Drive as they would be in a real quiz and trashed at the end.}
 }
 \value{
 Creates quiz HTML files and results images.

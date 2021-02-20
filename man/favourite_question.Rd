@@ -13,7 +13,7 @@ favourite_question(n = NULL, quiz = getOption("peRson.quiz"))
 questions (n, person, text)).}
 }
 \value{
-
+Writes quiz/Q{{n+1}}.html file.
 }
 \description{
 Creates an HTML file with the table of asked questions and their sequence

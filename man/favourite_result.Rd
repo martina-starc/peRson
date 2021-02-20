@@ -15,11 +15,12 @@ questions (n, person, text)).}
 
 \item{answer}{Data frame with the answer. Must contain one column for each
 participant named with their name and one row with their answers (see
-[demo_favourite]). If NULL it is read from the summary answer sheet created
-by [quiz_setup()].}
+[demo_favourite]). If NULL, it is read from the summary answer sheet
+created by [quiz_setup()].}
 }
 \value{
-
+Writes quiz/Q{{n+2}}.html file. Assigns favourite_results to quiz
+  environment.
 }
 \description{
 Creates an HTML file with the table of questions that were chosen as

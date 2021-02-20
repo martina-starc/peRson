@@ -35,5 +35,6 @@ Imports:
     googlesheets4,
     googledrive,
     rvest,
-    xml2
+    xml2,
+    tibble
 VignetteBuilder: knitr

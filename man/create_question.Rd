@@ -13,7 +13,7 @@ create_question(n, quiz = getOption("peRson.quiz"))
 question_colors, named_colors, css_file).}
 }
 \value{
-
+Writes quiz/Q{{n}}.html file.
 }
 \description{
 Creates an HTML file with the question, answers, answer images, image holders

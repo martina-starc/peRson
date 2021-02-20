@@ -49,5 +49,8 @@ A quiz environment with the following variables. \describe{
   [evaluate_answers()]} }
 }
 \description{
-Set up the quiz environment
+Everything the quiz needs to work is assigned to variables in the quiz
+environment. Quiz functions access these variables through the quiz
+environment that can be passed as an argument or set as a global option
+`peRson.quiz`.
 }

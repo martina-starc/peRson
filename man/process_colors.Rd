@@ -18,5 +18,5 @@ A data frame with random colors chosen for participants who didn't
 \description{
 For participants who didn't choose colors a random color is picked. Colors
 are converted to RGB and hex to use in HTML files. Distance from other
-participants' colors is calculated.
+participants' colors is calculated for final results.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/quiz_setup.R
 \name{shuffle_questions}
 \alias{shuffle_questions}
-\title{Randomly shuffle questions in groups}
+\title{Randomly shuffle questions in rounds}
 \usage{
 shuffle_questions(questions, shuffle_by = rn)
 }
@@ -18,8 +18,8 @@ groups.}
 A data frame with shuffled questions.
 }
 \description{
-Divides the questions into groups containing one question per participant,
-then randomly shuffles the order of the questions within the group. This way
+Divides the questions into rounds containing one question per participant,
+then randomly shuffles the order of the questions within the round. This way
 the order of the questions will be random, but a question from the same
 participant won't appear again until a question from every participant is
 used.

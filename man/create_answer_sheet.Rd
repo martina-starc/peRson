@@ -18,7 +18,7 @@ The id of the sheet as a character string.
 }
 \description{
 The function creates a Google Sheet on Google Drive containing a table with
-the question number and an empty Answer column. The sheet has n_questions + 1
-rows (additional row is for the favourite question). Write access is given to
-the participant so they may enter their answers during the quiz.
+the question numbers and an empty Answer column. The sheet has n_questions +
+1 rows (additional row is for the favourite question). Write access is given
+to the participant so they can enter their answers during the quiz.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/show_contestants.R
 \name{show_contestants}
 \alias{show_contestants}
-\title{Create the quiz intro HTML page with participants' images and colors}
+\title{Create the quiz intro page with participants' images and colors}
 \usage{
 show_contestants(
   presence = NULL,
@@ -20,8 +20,8 @@ environment (presence).}
 named_colors, question_colors, css_file, participants)}
 }
 \value{
-Saves Q0.html file.
+Writes quiz/Q0.html file.
 }
 \description{
-Create the quiz intro HTML page with participants' images and colors
+Create the quiz intro page with participants' images and colors
 }

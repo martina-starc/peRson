@@ -12,7 +12,7 @@ presence, all_questions, favourite_results, participants, named_colors,
 css_file)}
 }
 \value{
-
+Writes quiz/Q{{n_questions+3}}.html file.
 }
 \description{
 Computes the final results and creates an HTML file with participants'

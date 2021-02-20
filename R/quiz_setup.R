@@ -1,5 +1,10 @@
 #' Set up the quiz environment
 #'
+#' Everything the quiz needs to work is assigned to variables in the quiz
+#' environment. Quiz functions access these variables through the quiz
+#' environment that can be passed as an argument or set as a global option
+#' `peRson.quiz`.
+#'
 #' @param questions A data frame with questions (see [demo_questions] for
 #'   format).
 #' @param participants A data frame with participants (see [demo_participants]
@@ -30,8 +35,6 @@
 #'   \item{answers}{empty list that will be filled with answers by
 #'   [evaluate_answers()]} }
 #' @export
-#'
-#' @examples
 quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE, create_sheets = TRUE) {
   dir.create("quiz")
   quiz <- list()
@@ -76,21 +79,33 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE,
   list2env(quiz, envir = quiz.env)
 }
 
-
+#' Create all the pages of the quiz
+#'
+#' Create the intro, questions and favourite question pages in one step.
+#'
+#' @param quiz Quiz environment with quiz variables.
+#'
+#' @return Writes quiz pages quiz/Q{{n}}.html from 0 to number of questions plus
+#'   1.
+#' @export
+create_quiz_pages <- function(quiz = getOption("peRson.quiz")) {
+  n_questions <- nrow(quiz$questions)
+  show_contestants(quiz$participants$name, quiz = quiz)
+  purrr::walk(1:n_questions, ~ create_question(., quiz = quiz))
+  favourite_question(n = n_questions, quiz = quiz)
+}
 
 #' Process colors chosen by participants
 #'
 #' For participants who didn't choose colors a random color is picked. Colors
 #' are converted to RGB and hex to use in HTML files. Distance from other
-#' participants' colors is calculated.
+#' participants' colors is calculated for final results.
 #'
 #' @inheritParams quiz_setup
 #'
 #' @return A data frame with random colors chosen for participants who didn't
 #'   choose colors, r, g, b columns with RGB values, hex with hex color value
 #'   and dist with the average distance from other participants' colors.
-#'
-#' @examples
 process_colors <- function(participants) {
   participants %>%
     rowwise() %>%
@@ -105,10 +120,10 @@ process_colors <- function(participants) {
 }
 
 
-#' Randomly shuffle questions in groups
+#' Randomly shuffle questions in rounds
 #'
-#' Divides the questions into groups containing one question per participant,
-#' then randomly shuffles the order of the questions within the group. This way
+#' Divides the questions into rounds containing one question per participant,
+#' then randomly shuffles the order of the questions within the round. This way
 #' the order of the questions will be random, but a question from the same
 #' participant won't appear again until a question from every participant is
 #' used.
@@ -136,8 +151,6 @@ shuffle_questions <- function(questions, shuffle_by = rn) {
 #' @inheritParams quiz_setup
 #'
 #' @return A data frame with shuffled answers.
-#'
-#' @examples
 shuffle_answers <- function(questions) {
   questions %>%
     tidyr::pivot_longer(

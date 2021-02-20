@@ -1,4 +1,4 @@
-#' Create the quiz intro HTML page with participants' images and colors
+#' Create the quiz intro page with participants' images and colors
 #'
 #' @param presence Vector of present participants. If NULL, taken from quiz
 #'   environment (presence).
@@ -6,10 +6,8 @@
 #' @param quiz Quiz environment with quiz variables (uses presence,
 #'   named_colors, question_colors, css_file, participants)
 #'
-#' @return Saves Q0.html file.
+#' @return Writes quiz/Q0.html file.
 #' @export
-#'
-#' @examples
 show_contestants <- function(presence = NULL, n_per_row = 5, quiz = getOption("peRson.quiz")) {
   args <- as.list(quiz)[c("presence", "named_colors", "participants", "css_file")]
   args$bg_next <- quiz$question_colors[1]

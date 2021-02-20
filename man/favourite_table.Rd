@@ -16,7 +16,7 @@ person, text)}
 question_colors, named_colors).}
 }
 \value{
-
+Writes quiz/Q{{n}}.html file.
 }
 \description{
 Create an HTML favourite question table

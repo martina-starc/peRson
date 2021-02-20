@@ -28,7 +28,7 @@ answers, questions).}
 }
 \value{
 Evaluated answers are saved to the quiz environment answers list. A
-  plot with results is printed and saved to "quiz/A{n}.png".
+  plot with results is saved to "quiz/A{{n}}.png".
 }
 \description{
 Evaluate the correctness of question answers

@@ -8,10 +8,8 @@
 #' @param quiz Quiz environment with quiz variables (uses answers (length),
 #'   questions (n, person, text)).
 #'
-#' @return
+#' @return Writes quiz/Q{{n+1}}.html file.
 #' @export
-#'
-#' @examples
 favourite_question <- function(n = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(n)) {
     n <- length(quiz$answers)
@@ -34,17 +32,16 @@ favourite_question <- function(n = NULL, quiz = getOption("peRson.quiz")) {
 #'
 #' @param answer Data frame with the answer. Must contain one column for each
 #'   participant named with their name and one row with their answers (see
-#'   [demo_favourite]). If NULL it is read from the summary answer sheet created
-#'   by [quiz_setup()].
+#'   [demo_favourite]). If NULL, it is read from the summary answer sheet
+#'   created by [quiz_setup()].
 #' @param n Number of questions in the quiz (excluding the favourite questions
 #'   question).
 #' @param quiz Quiz environment with quiz variables (uses answers (length),
 #'   questions (n, person, text)).
 #'
-#' @return
+#' @return Writes quiz/Q{{n+2}}.html file. Assigns favourite_results to quiz
+#'   environment.
 #' @export
-#'
-#' @examples
 favourite_result <- function(answers = NULL, n = NULL, quiz = getOption("peRson.quiz")) {
   if (is.null(n)) {
     n <- length(quiz$answers)
@@ -82,7 +79,7 @@ favourite_result <- function(answers = NULL, n = NULL, quiz = getOption("peRson.
 #' @param quiz Quiz environment with quiz variables (uses css_file,
 #'   question_colors, named_colors).
 #'
-#' @return
+#' @return Writes quiz/Q{{n}}.html file.
 #'
 #' @examples
 favourite_table <- function(questions, n, quiz = getOption("peRson.quiz")) {
