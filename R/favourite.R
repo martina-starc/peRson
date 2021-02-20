@@ -30,10 +30,10 @@ favourite_question <- function(n = NULL, quiz = getOption("peRson.quiz")) {
 #' As the results of the favourite question are processed in this function, it
 #' also saves favourite_result table to the quiz environment.
 #'
-#' @param answer Data frame with the answer. Must contain one column for each
-#'   participant named with their name and one row with their answers (see
-#'   [demo_favourite]). If NULL, it is read from the summary answer sheet
-#'   created by [quiz_setup()].
+#' @param answers Data frame with the answers. Must contain one column for each
+#'   participant named with their name and favourite answer in the last row (see
+#'   [demo_answers]). If NULL, it is read from the summary answer sheet created
+#'   by [quiz_setup()].
 #' @param n Number of questions in the quiz (excluding the favourite questions
 #'   question).
 #' @param quiz Quiz environment with quiz variables (uses answers (length),
