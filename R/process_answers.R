@@ -64,7 +64,7 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
     )
 
   ggplot2::ggsave(filename = paste0("quiz/A", n, ".png"), plot = results_plot, height = plot_height)
-  if (n %% 4 == 0 | n == nrows(quiz$questions)) show_leaderboard(n = n, quiz = quiz)
+  if (n %% 4 == 0 | n == nrow(quiz$questions)) show_leaderboard(n = n, quiz = quiz)
 }
 
 

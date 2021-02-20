@@ -8,8 +8,6 @@
 #' @param participants A data frame with participants (see [demo_participants]
 #'   for format).
 #' @param answers A data frame with answers (see [demo_answers] for format).
-#' @param favourite A data frame with favourite question (see [demo_favourite]
-#'   for format).
 #' @param create_sheets If TRUE, sheets for answers will be created on Google
 #'   Drive as they would be in a real quiz and trashed at the end.
 #'
@@ -18,7 +16,6 @@
 run_demo_quiz <- function(questions = demo_questions,
                           participants = get_demo_participants(),
                           answers = demo_answers,
-                          favourite = demo_favourite,
                           create_sheets = FALSE) {
   quiz <- quiz_setup(questions, participants, create_sheets = create_sheets)
   options(peRson.quiz = quiz)
@@ -26,7 +23,7 @@ run_demo_quiz <- function(questions = demo_questions,
   show_contestants(quiz$participants$name)
   purrr::walk(1:nrow(quiz$questions), ~ evaluate_answers(answers))
   favourite_question()
-  favourite_result(favourite)
+  favourite_result(answers)
   final_results()
   if (create_sheets) quiz_clean_drive()
 }
