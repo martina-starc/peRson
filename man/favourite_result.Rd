@@ -7,16 +7,16 @@
 favourite_result(answers = NULL, n = NULL, quiz = getOption("peRson.quiz"))
 }
 \arguments{
+\item{answers}{Data frame with the answers. Must contain one column for each
+participant named with their name and favourite answer in the last row (see
+[demo_answers]). If NULL, it is read from the summary answer sheet created
+by [quiz_setup()].}
+
 \item{n}{Number of questions in the quiz (excluding the favourite questions
 question).}
 
 \item{quiz}{Quiz environment with quiz variables (uses answers (length),
 questions (n, person, text)).}
-
-\item{answer}{Data frame with the answer. Must contain one column for each
-participant named with their name and one row with their answers (see
-[demo_favourite]). If NULL, it is read from the summary answer sheet
-created by [quiz_setup()].}
 }
 \value{
 Writes quiz/Q{{n+2}}.html file. Assigns favourite_results to quiz

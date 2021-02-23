@@ -66,7 +66,8 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE,
     quiz$summary_sheet_id <- create_summary_sheet(quiz$participants, nrow(quiz$questions))
   }
   quiz$named_colors <- with(quiz$participants, c(purrr::set_names(hex, name),
-    "avg" = grDevices::rgb(mean(r[chose_color], na.rm = TRUE),
+    "avg" = grDevices::rgb(
+      mean(r[chose_color], na.rm = TRUE),
       mean(g[chose_color], na.rm = TRUE),
       mean(b[chose_color], na.rm = TRUE),
       maxColorValue = 255

@@ -50,10 +50,10 @@ a.next:hover {{
     <td class="q" colspan=4>{n}. {text}</td>
   </tr>
   <tr>
-    <td>A: {answer_A}<img src="{image_A}"></img></td>
-    <td>B: {answer_B}<img src="{image_B}"></img></td>
-    <td>C: {answer_C}<img src="{image_C}"></img></td>
-    <td>D: {answer_D}<img src="{image_D}"></img></td>
+    <td>A: {answer_A}<img src="{image_A}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+    <td>B: {answer_B}<img src="{image_B}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+    <td>C: {answer_C}<img src="{image_C}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+    <td>D: {answer_D}<img src="{image_D}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
   </tr>
   <tr>
     <td colspan=4><img src="A{n}.png" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
@@ -73,6 +73,51 @@ a.next:hover {{
 '))
 
   html_file <- file(paste0("quiz/Q", n, ".html"))
+  writeLines(html_doc, html_file)
+  close(html_file)
+}
+
+
+#' Create an HTML file with all quiz questions for image preview
+#'
+#' Creates an HTML file with the questions, answers and answer images. This way
+#' you can preview all images, replace some if necessary and have them loaded in
+#' the browser cache, so they load faster during the quiz.
+#'
+#' @param questions A data frame with the questions (see [demo_questions] for format)
+#'
+#' @return Writes quiz/preview_images.html file.
+#' @export
+preview_images <- function(questions) {
+  css_file <- system.file("css", "styles.css", package = "peRson")
+  rows <- purrr::pmap(questions, function(text, answer_A, answer_B, answer_C, answer_D, image_A, image_B, image_C, image_D, ...) {
+  glue::glue('
+<tr>
+    <td class="q" colspan=4>{text}</td>
+</tr>
+<tr>
+  <td>A: {answer_A}<img src="{image_A}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+  <td>B: {answer_B}<img src="{image_B}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+  <td>C: {answer_C}<img src="{image_C}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+  <td>D: {answer_D}<img src="{image_D}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
+</tr>
+  ')}
+  )
+  html_doc <- glue::glue('
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{css_file}">
+</head>
+<body>
+<table id="question">
+  {rows}
+</table>
+</body>
+</html>
+')
+
+  html_file <- file(paste0("quiz/preview_images.html"))
   writeLines(html_doc, html_file)
   close(html_file)
 }

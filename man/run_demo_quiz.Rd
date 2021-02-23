@@ -8,7 +8,6 @@ run_demo_quiz(
   questions = demo_questions,
   participants = get_demo_participants(),
   answers = demo_answers,
-  favourite = demo_favourite,
   create_sheets = FALSE
 )
 }
@@ -20,9 +19,6 @@ format).}
 for format).}
 
 \item{answers}{A data frame with answers (see [demo_answers] for format).}
-
-\item{favourite}{A data frame with favourite question (see [demo_favourite]
-for format).}
 
 \item{create_sheets}{If TRUE, sheets for answers will be created on Google
 Drive as they would be in a real quiz and trashed at the end.}

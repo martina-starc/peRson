@@ -78,6 +78,36 @@ get_color_dist <- function(r, g, b) {
     colMeans()
 }
 
+#' Get the average hex color from a list of colors
+#'
+#' First the average hue is calculated by averaging r, g and b components of the
+#' colors and converted to HSL. Then, this hue is combined with average s and l
+#' in order to avoid muddy colors. Finally, the combined HSV is converted to
+#' hex.
+#'
+#' @param color_names Vector of color names (from [grDevices::colors()]).
+#'
+#' @return Average color in hex form.
+average_color <- function(color_names) {
+  color_table <- tibble(color = color_names) %>%
+    rowwise() %>%
+    mutate(rgb = list(purrr::set_names(grDevices::col2rgb(color), c("r", "g", "b"))),
+           hsv = list(purrr::set_names(grDevices::rgb2hsv(rgb), c("h", "s", "v")))) %>%
+    ungroup() %>%
+    tidyr::unnest_wider(rgb) %>%
+    tidyr::unnest_wider(hsv)
+
+  average_color <- color_table %>%
+    select(-color) %>%
+    summarise_all(mean)
+  average_hue <- with(average_color, grDevices::rgb2hsv(r, g, b, maxColorValue = 255) %>% as.vector())[1]
+  #average_rgb = with(average_color, grDevices::rgb(r, g, b, maxColorValue = 255))
+  #average_hsv = with(average_color, colorspace::HSV(h * 360, s, v) %>% colorspace::hex())
+  #average_hue =
+  with(average_color, colorspace::HSV(average_hue * 360, s, v) %>% colorspace::hex())
+}
+
+
 #' Get the URL of the first image search result on Bing
 #'
 #' Google makes it hard to scrape images, so Bing it is. :D
@@ -94,7 +124,7 @@ get_first_bing_image <- function(search_term) {
     search_term <- search_term %>%
       stringr::str_replace_all("[^[:alnum:][:space:]]", "") %>%
       stringr::str_replace_all(" ", "+")
-    page <- xml2::read_html(glue::glue("https://www.bing.com/images/search?q={search_term}"))
+    page <- xml2::read_html(glue::glue("https://www.bing.com/images/search?q={search_term}&qft=+filterui%3aaspect-wide"))
     nodes <- rvest::html_nodes(page, css = "a.thumb")
     hrefs <- rvest::html_attr(nodes, "href") %>% purrr::keep(!(. %in% suppressMessages(tools::showNonASCII(.))))
     if (length(hrefs) == 0) {
