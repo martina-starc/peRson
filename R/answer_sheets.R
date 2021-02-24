@@ -14,7 +14,17 @@
 create_answer_sheet <- function(name, email, n_questions) {
   answer_table <- data.frame(N = 1:(n_questions + 1), Answer = NA, stringsAsFactors = FALSE)
   answer_sheet_id <- googlesheets4::gs4_create(paste0("Answers ", name), sheets = list("Answers" = answer_table))
-  drive_dribble <- googledrive::drive_share(answer_sheet_id, role = "writer", type = "user", emailAddress = email)
+  drive_dribble <- tryCatch(
+    {
+      googledrive::drive_share(googledrive::as_id(answer_sheet_id), role = "writer", type = "user", emailAddress = email)
+    },
+    error = function(cond) {
+      message(paste("Could not share sheet with", email))
+      message("Here's the original error message:")
+      message(cond)
+      return(NA)
+    }
+  )
   as.character(answer_sheet_id)
 }
 

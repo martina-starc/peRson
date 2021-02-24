@@ -101,10 +101,10 @@ average_color <- function(color_names) {
     select(-color) %>%
     summarise_all(mean)
   average_hue <- with(average_color, grDevices::rgb2hsv(r, g, b, maxColorValue = 255) %>% as.vector())[1]
-  #average_rgb = with(average_color, grDevices::rgb(r, g, b, maxColorValue = 255))
+  #average_rgb =
+  with(average_color, grDevices::rgb(r, g, b, maxColorValue = 255))
   #average_hsv = with(average_color, colorspace::HSV(h * 360, s, v) %>% colorspace::hex())
-  #average_hue =
-  with(average_color, colorspace::HSV(average_hue * 360, s, v) %>% colorspace::hex())
+  #average_hue =with(average_color, colorspace::HSV(average_hue * 360, s, v) %>% colorspace::hex())
 }
 
 

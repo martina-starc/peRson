@@ -89,6 +89,7 @@ a.next:hover {{
 #' @return Writes quiz/preview_images.html file.
 #' @export
 preview_images <- function(questions) {
+  dir.create("quiz")
   css_file <- system.file("css", "styles.css", package = "peRson")
   rows <- purrr::pmap(questions, function(text, answer_A, answer_B, answer_C, answer_D, image_A, image_B, image_C, image_D, ...) {
   glue::glue('
