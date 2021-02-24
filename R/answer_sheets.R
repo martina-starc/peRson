@@ -48,7 +48,7 @@ create_summary_sheet <- function(participants, n_questions) {
     mutate(import_formula = googlesheets4::gs4_formula(glue::glue('=IMPORTRANGE("{answer_sheet}", "Answers!B2:B")'))) %>%
     select(name, import_formula) %>%
     tidyr::pivot_wider(names_from = name, values_from = import_formula)
-  googlesheets4::gs4_create("Answers summary", sheets = list("Answers" = import_table)) %>%
+  googlesheets4::gs4_create("Answers summary", sheets = list("Answers" = import_table), locale = "en_US") %>%
     googlesheets4::sheet_resize(sheet = "Answers", nrow = n_questions + 2) %>%
     as.character()
 }

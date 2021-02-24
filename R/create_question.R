@@ -91,10 +91,13 @@ a.next:hover {{
 preview_images <- function(questions) {
   dir.create("quiz")
   css_file <- system.file("css", "styles.css", package = "peRson")
-  rows <- purrr::pmap(questions, function(text, answer_A, answer_B, answer_C, answer_D, image_A, image_B, image_C, image_D, ...) {
+
+  rows <- questions %>%
+    mutate(n = 1:nrow(questions)) %>%
+    purrr::pmap(function(n, text, answer_A, answer_B, answer_C, answer_D, image_A, image_B, image_C, image_D, ...) {
   glue::glue('
 <tr>
-    <td class="q" colspan=4>{text}</td>
+    <td class="q" colspan=4>{n}. {text}</td>
 </tr>
 <tr>
   <td>A: {answer_A}<img src="{image_A}" onerror="this.onerror=null; this.src=\'{get_transparent_pic()}\'"></img></td>
