@@ -19,7 +19,7 @@ create_answer_sheet <- function(name, email, n_questions) {
       googledrive::drive_share(googledrive::as_id(answer_sheet_id), role = "writer", type = "user", emailAddress = email)
     },
     error = function(cond) {
-      message(paste("Could not share sheet with", email))
+      message(paste("Possible issues sharing the answer sheet with ", email, ". Check results."))
       message("Here's the original error message:")
       message(cond)
       return(NA)
