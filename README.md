@@ -19,8 +19,10 @@ You can install the released version of peRson from
 [Github](https://www.github.com/) with:
 
 ``` r
-remotes::install_github("martina-starc/peRson")
+remotes::install_github("martina-starc/peRson", build_vignettes = TRUE)
 ```
+
+Build vignettes to access the tutorial.
 
 ## Example quiz pages
 
