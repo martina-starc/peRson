@@ -6,7 +6,15 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+```{css, echo=FALSE}
+img {
+  padding: 0;
+  display: block;
+  margin: 0 auto;
+  max-height: 100%;
+  max-width: 100%;
+}
+```
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -41,14 +49,15 @@ participants <- get_demo_participants()
 ```
 If participants didn't provide all the images and you don't want to add them manually, you have the option of replacing missing images with results from Bing with `add_bing_images`. The function returns the first image it finds by using the answer as a search term. It takes a while to get all the results, so it's advisable to prepare this in advance and save the results for later. 
 ```{r, eval = FALSE}
-# Not run. 
+# All code examples below are not run. 
 questions <- demo_questions %>%
   add_bing_images()
 preview_images(questions)
 browseURL("quiz/preview_images.html")
 ```
 You can preview all the images with `preview_images`. This will create a page preview_images.html in the quiz folder. Open it and inspect the results. Some images might be missing if Bing still has them cached, but they're gone from the original site and some images might be inappropriate. You can replace them manually in the data frame as needed.
-<img src="man/figures/12_preview_images.png"/>
+
+<img src="../man/figures/12_preview_images.png"/>
 
 ## Quiz time!
 
@@ -59,16 +68,21 @@ By default, the answers (which answer is under which letter) and the order of th
 
 `quiz_setup` will create answer sheets on your Google Drive so you'll need to authenticate in this step. It will give each participant write access to their sheet. 
 
+<img src="../man/figures/01_answer_sheet.png" style="max-width: 50%"/>
+
 If you keep the create_sheets option on in the demonstration, the sheets will be shared with fake emails in `demo_participants` so expect to see some mail delivery failure emails in your inbox. :) Alternatively, you can overwrite the email column in the participants data frame with your real email address, just to test that everything works.
 ```{r, eval = FALSE}
-# Not run.
 quiz <- quiz_setup(questions, participants)
 as.list(quiz)
 options(peRson.quiz = quiz)
 ```
 `quiz_setup` will prepare all the data necessary to create quiz pages and save it into the quiz environment. Save the environment and assign it as a global option. The quiz functions will be able to access the environment via global options and you won't have to include it in the arguments. You can check what was done by listing the variables in the environment.
 
-In addition to participants' answer sheets, a summary sheet with imported answers from individual sheets will be created. However, in order for the imports to work, you'll need to go to your drive, open the summary sheet and manually link the sheets. You can do this while your participants check their emails and open their answer sheets. The imports are an extra step, but this has the advantage of only accessing one sheet when you evaluate answers and you can also check it during the quiz to see when all participants have answered the questions (with a bit of lag).
+In addition to participants' answer sheets, a summary sheet with imported answers from individual sheets will be created. However, in order for the imports to work, you'll need to go to your drive, open the summary sheet and manually link the sheets. 
+
+<img src="../man/figures/02_summary_sheet.png" style="max-width: 75%"/>
+
+You can do this while your participants check their emails and open their answer sheets. The imports are an extra step, but this has the advantage of only accessing one sheet when you evaluate answers and you can also check it during the quiz to see when all participants have answered the questions (with a bit of lag).
 
 
 ### Create quiz pages
@@ -76,14 +90,20 @@ In addition to participants' answer sheets, a summary sheet with imported answer
 ```{r, eval = FALSE}
 show_contestants()
 ```
+<img src="../man/figures/04_show_contestants.png"/>
+
 Next, create the question pages with `create_question`. You can do it in a loop to create them all in one step. In our example, the function will create pages Q1.html-Q21.html.
 ```{r, eval = FALSE}
 purrr::walk(1:nrow(quiz$questions), create_question)
 ```
+<img src="../man/figures/05_create_question.png"/>
+
 You can also already create a page for favourite question (Q22.html). If for some reason you need to cut the quiz short, you can run it again before ending the quiz. 
 ```{r, eval = FALSE}
 favourite_question(nrow(quiz$questions))
 ```
+<img src="../man/figures/09_favourite_question.png"/>
+
 Alternatively, you can do these three steps with `create_quiz_pages`.
 ```{r, eval = FALSE}
 create_quiz_pages()
@@ -94,6 +114,9 @@ Just for the purpose of demonstration, we will fill the demo answers sheets with
 ```{r, eval = FALSE}
 fill_demo_answer_sheets()
 ```
+<img src="../man/figures/03_summary_filled.png" style="max-width: 75%"/>
+
+
 ### Start the quiz
 Start the quiz by opening Q0.html and sharing the screen with your participants. The first page will show their pictures and colors. Click on the navigation bar at the bottom of the page to progress to the first question.
 ```{r, eval = FALSE}
@@ -105,9 +128,14 @@ Once everyone has answered, run the `evaluate_answers` function in your R sessio
 ```{r, eval = FALSE}
 evaluate_answers()
 ```
+<img src="../man/figures/06_evaluate_answers.png"/>
+
 Go back to the browser and refresh the page (either with the browser key or by clicking on the navigation bar above the question). The image with the results will appear under the question. Move on to the next question, wait for the answers, then run `evaluate_answers` again. Repeat to the end of the quiz. 
 
 Every fourth question a leaderboard image (for example L4.png) will be created and shown under the results image.
+
+<img src="../man/figures/07_leaderboard.png"/>
+
 Here we'll just map over the questions in the quiz, so you can check everything works (some sleep is included because otherwise your Read requests per minute quota could be exhausted).
 ```{r, eval = FALSE}
 purrr::walk(2:21, function(n) { 
@@ -115,14 +143,19 @@ purrr::walk(2:21, function(n) {
   evaluate_answers()
 })
 ```
+
 When you get to the favourite question page, participants choose their favourite question and put its number in the answer sheet. To evaluate and create the results page, run `favourite_result`. 
 ```{r, eval = FALSE}
 favourite_result()
 ```
+<img src="../man/figures/10_favourite_result.png"/>
+
 Finally, run `final_results` to create the final page of the quiz. Participants will be awarded badges for winner, top 3, answering above random, etc. Hover over the badges to see the badge description.
 ```{r, eval = FALSE}
 final_results()
 ```
+<img src="../man/figures/11_final_results.png"/>
+
 That's it! I hope you'll have fun putting together this quiz! 
 
 ### Clean up
