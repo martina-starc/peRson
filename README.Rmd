@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of peRson is to ...
+The goal of peRson is to learn about people in your life with a fun personal quiz. All you need is R, Google Sheets and video conferencing. Quarantine and long-distance friendly! :) 
 
 ## Installation
 
@@ -29,28 +29,9 @@ You can install the released version of peRson from [Github](https://www.github.
 remotes::install_github("martina-starc/peRson")
 ```
 
-## Example
+## Example quiz pages
 
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-library(peRson)
-
-
-```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/master/examples>.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-#plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+<img src="man/figures/04_show_contestants.png"/>
+<img src="man/figures/05_create_question.png"/>
+<img src="man/figures/09_favourite_question.png"/>
+<img src="man/figures/11_final_results.png"/>
