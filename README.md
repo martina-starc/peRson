@@ -22,7 +22,7 @@ You can install the released version of peRson from
 remotes::install_github("martina-starc/peRson", build_vignettes = TRUE)
 ```
 
-Build vignettes to access the tutorial.
+Build vignettes to access the tutorial with `vignette("quiz")`.
 
 ## Example quiz pages
 
