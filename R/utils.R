@@ -121,16 +121,20 @@ average_color <- function(color_names) {
 #' @export
 get_first_bing_image <- function(search_term) {
   purrr::map_chr(search_term, function(search_term) {
-    search_term <- search_term %>%
+    hrefs <- search_term %>%
       stringr::str_replace_all("[^[:alnum:][:space:]]", "") %>%
-      stringr::str_replace_all(" ", "+")
-    page <- xml2::read_html(glue::glue("https://www.bing.com/images/search?q={search_term}&qft=+filterui%3aaspect-wide"))
-    nodes <- rvest::html_nodes(page, css = "a.thumb")
-    hrefs <- rvest::html_attr(nodes, "href") %>% purrr::keep(!(. %in% suppressMessages(tools::showNonASCII(.))))
+      stringr::str_replace_all(" ", "+") %>%
+      glue::glue("https://www.bing.com/images/search?q={search_term}&qft=+filterui%3aaspect-wide", search_term = .) %>%
+      xml2::read_html() %>%
+      rvest::html_nodes(css = "a.iusc") %>%
+      rvest::html_attr("m") %>%
+      stringr::str_match(".*murl\":\"(.*?)\"") %>%
+      `[`(, 2) %>%
+      purrr::keep(!(. %in% suppressMessages(tools::showNonASCII(.))))
     if (length(hrefs) == 0) {
       get_transparent_pic()
     } else {
-      hrefs[[1]]
+      hrefs[1]
     }
   })
 }
