@@ -124,6 +124,7 @@ get_first_bing_image <- function(search_term) {
     hrefs <- search_term %>%
       stringr::str_replace_all("[^[:alnum:][:space:]]", "") %>%
       stringr::str_replace_all(" ", "+") %>%
+      utils::URLencode() %>%
       glue::glue("https://www.bing.com/images/search?q={search_term}&qft=+filterui%3aaspect-wide", search_term = .) %>%
       xml2::read_html() %>%
       rvest::html_nodes(css = "a.iusc") %>%
