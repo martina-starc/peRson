@@ -19,7 +19,7 @@ evaluate_answers <- function(answers = NULL, n = NULL, correct_answer = NULL, qu
     answers <- suppressMessages(googlesheets4::read_sheet(quiz$summary_sheet_id, sheet = "Answers")) %>%
       mutate_all(as.character)
   }
-  n <- if_else(is.null(n), as.integer(length(quiz$answers) + 1), n)
+  n <- if_else(is.null(n), as.integer(length(quiz$answers) + 1), as.integer(n))
 
   answer <- answers[n, ]
   correct_answer <- if_else(is.null(correct_answer), answer[[quiz$questions[[n, "person"]]]], correct_answer)
