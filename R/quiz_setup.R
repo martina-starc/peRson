@@ -39,6 +39,11 @@ quiz_setup <- function(questions, participants, presence = NULL, shuffle = TRUE,
   dir.create("quiz")
   quiz <- list()
   quiz$presence <- if (is.null(presence)) participants$name else presence
+  participants_no_questions <- setdiff(quiz$presence, questions$person)
+  questions_no_participants <- setdiff(questions$person, quiz$presence)
+  if (length(participants_no_questions) > 0) {
+    warning("\nThese participants provided no questions: ", paste(participants_no_questions, collapse = ", "), "\nCheck for possible name mismatch.\nQuestions with no participants: ", paste(questions_no_participants, collapse = ", "))
+  }
   quiz$css_file <- system.file("css", "styles.css", package = "peRson")
   quiz$all_questions <- questions %>% {
     if (shuffle) shuffle_answers(.) else .
